@@ -1,10 +1,10 @@
 {
-  "name": "@voiceflow/middleware",
+  "name": "@voiceflow/backend-utils",
   "description": "Junk drawer of utility functions",
   "version": "1.0.0",
   "author": "Voiceflow",
   "bugs": {
-    "url": "https://github.com/voiceflow/middleware/issues"
+    "url": "https://github.com/voiceflow/backend-utils/issues"
   },
   "config": {
     "commitizen": {
@@ -52,7 +52,7 @@
     "*.js",
     "!scratch.*"
   ],
-  "homepage": "https://github.com/voiceflow/middleware#readme",
+  "homepage": "https://github.com/voiceflow/backend-utils#readme",
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
@@ -95,7 +95,7 @@
   "prettier": "@voiceflow/prettier-config",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/voiceflow/middleware.git"
+    "url": "git+https://github.com/voiceflow/backend-utils.git"
   },
   "scripts": {
     "commit": "git-cz",
