@@ -48,7 +48,7 @@ describe('createFixture', () => {
     // middlewares
     expect(Object.keys(generatedFixtures.middlewares.middleware1)).to.eql(['method1', 'method2', 'method3']);
     expect(generatedFixtures.middlewares.middleware1.method1[0].callCount).to.eql(0); // check that stub is generated
-    expect(generatedFixtures.middlewares.middleware1.method2[0]().callCount).to.eql(0); // check that stub factory is generated
+    expect(generatedFixtures.middlewares.middleware1.method2().callCount).to.eql(0); // check that stub factory is generated
     expect(generatedFixtures.middlewares.middleware1.method3.length).to.eql(3); // validations are added (2 validations + 1 middleware)
     const middlewareStub3 = generatedFixtures.middlewares.middleware1.method3[2];
     expect(middlewareStub3.validations.validation1.callCount).to.eql(0); // check that validation stub is generated
@@ -97,7 +97,7 @@ describe('checkFixtures', () => {
     };
     const generatedFixtures = await FixtureGenerator.createFixture(serviceManager);
     await generatedFixtures.middlewares.middleware1.method1[0](null, null, () => {}); // call middleware1.method1
-    await generatedFixtures.middlewares.middleware1.method2[0]()(null, null, () => {}); // call middleware1.method2
+    await generatedFixtures.middlewares.middleware1.method2()(null, null, () => {}); // call middleware1.method2
     await generatedFixtures.middlewares.middleware1.method3[0](null, null, () => {}); // call validation1 on middleware1.method3
     await generatedFixtures.controllers.controller1.method2[1](null, { json: (body) => body }, () => {}); // call controller1.method2
     await generatedFixtures.controllers.controller1.method2[0](null, null, () => {}); // call validation1 on controller1.method2
