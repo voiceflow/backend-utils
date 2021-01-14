@@ -105,6 +105,7 @@
     "prepare": "fixpack",
     "test": "nyc mocha --opts ./config/tests/mocha.opts tests/**/*.{unit,it}.js",
     "test:unit": "nyc mocha --opts ./config/tests/mocha.opts \"tests/**/*.unit.js\"",
-    "test:integration": "nyc mocha --opts ./config/tests/mocha.opts tests/**/*.it.js"
+    "test:integration": "nyc mocha --opts ./config/tests/mocha.opts tests/**/*.it.js",
+    "test:single": "mocha --opts ./config/tests/mocha.opts"
   }
 }
