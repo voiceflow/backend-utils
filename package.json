@@ -75,23 +75,6 @@
     ]
   },
   "main": "index.js",
-  "nyc": {
-    "exclude": [
-      "coverage/**",
-      "tests/**",
-      "scratch.js",
-      "index.js",
-      ".*.js",
-      "commitlint.config.js"
-    ],
-    "reporter": [
-      "html",
-      "text",
-      "text-summary",
-      "lcov"
-    ],
-    "all": true
-  },
   "prettier": "@voiceflow/prettier-config",
   "repository": {
     "type": "git",
