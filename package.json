@@ -75,23 +75,6 @@
     ]
   },
   "main": "index.js",
-  "nyc": {
-    "exclude": [
-      "coverage/**",
-      "tests/**",
-      "scratch.js",
-      "index.js",
-      ".*.js",
-      "commitlint.config.js"
-    ],
-    "reporter": [
-      "html",
-      "text",
-      "text-summary",
-      "lcov"
-    ],
-    "all": true
-  },
   "prettier": "@voiceflow/prettier-config",
   "repository": {
     "type": "git",
@@ -99,10 +82,13 @@
   },
   "scripts": {
     "commit": "git-cz",
-    "lint": "eslint \"**/*.js\" --fix",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "yarn lint --fix",
+    "lint:quiet": "yarn lint --quiet",
     "prepare": "fixpack",
-    "send-coverage": "cat ./coverage/lcov.info | codacy-coverage",
-    "test": "nyc mocha --use_strict \"tests/**/*.it.js\" \"tests/**/*.unit.js\"",
-    "unit": "mocha --use_strict --exit \"tests/**/*.unit.js\""
+    "test": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.{unit,it}.js'",
+    "test:unit": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.unit.js'",
+    "test:integration": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.it.js'",
+    "test:single": "mocha --opts ./config/tests/mocha.opts"
   }
 }

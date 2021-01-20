@@ -1,55 +1,33 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.2
+  vfcommon: voiceflow/common@0.0.52
+
 jobs:
-  release:
-    docker:
-      - image: node:11
+  build-and-test:
+    executor: vfcommon/default-executor
     steps:
       - checkout
-      - run: npm i -g semantic-release@15
-      - run: semantic-release
-  test:
-    docker:
-      - image: node:11
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: Add token
-          command:  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - vfcommon/install_node_modules
+      - vfcommon/lint_source
+      - vfcommon/unit_tests
+      - codecov/upload:
+          file: nyc_coverage/lcov.info
+          flags: unit
+      - vfcommon/integration_tests
+      - codecov/upload:
+          file: nyc_coverage/lcov.info
+          flags: integration
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
-
-      - run: npm i
-      - save_cache:
-          paths:
-            - node_modules
-          key: v2-dependencies-{{ checksum "package.json" }}
-
-      # run tests!
-      - run:
-          name: testing
-          command: npm run test
-
-      - run:
-          name: Coverage
-          command: npm run send-coverage
-
-      # run lint
-      - run:
-          name: lint
-          command: npm run lint
 workflows:
-  version: 2
-  test-and-build:
+  test-and-release:
     jobs:
-      - test
-      - release:
+      - build-and-test
+      - vfcommon/release:
           requires:
-            - test
+            - build-and-test
           filters:
             branches:
               only: master
+
