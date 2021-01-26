@@ -43,7 +43,7 @@
     "nyc": "^14.1.0",
     "prettier": "^1.19.1",
     "prettier-eslint-cli": "^5.0.0",
-    "semantic-release": "^15.13.17",
+    "semantic-release": "^17.2.3",
     "supertest": "^4.0.2"
   },
   "files": [
