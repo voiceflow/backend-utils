@@ -12,7 +12,7 @@
     }
   },
   "dependencies": {
-    "@voiceflow/logger": "^1.1.10",
+    "@voiceflow/logger": "^1.4.2",
     "@voiceflow/verror": "^1.1.0",
     "bluebird": "^3.7.2",
     "chai": "^4.2.0",
@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.0.0",
-    "@voiceflow/eslint-config": "^2.0.1",
-    "@voiceflow/git-branch-check": "^1.0.2",
-    "@voiceflow/prettier-config": "^1.0.4",
+    "@voiceflow/eslint-config": "^2.0.5",
+    "@voiceflow/git-branch-check": "^1.1.3",
+    "@voiceflow/prettier-config": "^1.0.5",
     "codacy-coverage": "^3.4.0",
     "commitizen": "^3.1.1",
     "commitlint": "^8.0.0",
@@ -41,7 +41,8 @@
     "lint-staged": "^8.2.1",
     "mocha": "^6.1.4",
     "nyc": "^14.1.0",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
+    "prettier-eslint-cli": "^5.0.0",
     "semantic-release": "^15.13.17",
     "supertest": "^4.0.2"
   },
@@ -71,6 +72,7 @@
     ],
     "**/*.js": [
       "eslint --fix",
+      "prettier-eslint --write",
       "git add"
     ]
   },
@@ -85,10 +87,11 @@
     "lint": "eslint \"**/*.js\"",
     "lint:fix": "yarn lint --fix",
     "lint:quiet": "yarn lint --quiet",
+    "lint:report": "yarn lint --format json -o sonar/report.json",
     "prepare": "fixpack",
     "test": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.{unit,it}.js'",
-    "test:unit": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.unit.js'",
     "test:integration": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.it.js'",
-    "test:single": "mocha --opts ./config/tests/mocha.opts"
+    "test:single": "mocha --opts ./config/tests/mocha.opts",
+    "test:unit": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.unit.js'"
   }
 }
