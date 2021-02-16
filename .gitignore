@@ -63,3 +63,5 @@ typings/
 # npm
 package-lock.json
 
+#Code coverage
+nyc_coverage
