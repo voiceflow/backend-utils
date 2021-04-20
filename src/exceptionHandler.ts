@@ -1,9 +1,9 @@
 'use strict';
 
-const _ = require('lodash');
-const VError = require('@voiceflow/verror');
+import _ from 'lodash';
+import VError from '@voiceflow/verror';
 
-const log = require('../logger');
+import log from '../logger';
 
 /**
  * @class

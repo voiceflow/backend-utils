@@ -25,6 +25,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@types/lodash": "^4.14.168",
     "@voiceflow/eslint-config": "^2.0.5",
     "@voiceflow/git-branch-check": "^1.1.3",
     "@voiceflow/prettier-config": "^1.0.5",
