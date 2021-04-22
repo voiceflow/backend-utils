@@ -67,7 +67,7 @@
     "lint:quiet": "yarn lint --quiet",
     "lint:report": "yarn lint --format json -o sonar/report.json",
     "prepare": "fixpack",
-    "test": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.{unit,it}.js'",
+    "test:run": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.{unit,it}.js'",
     "test:dependencies": "depcheck",
     "test:integration": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.it.js'",
     "test:single": "mocha --opts ./config/tests/mocha.opts",
