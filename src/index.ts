@@ -1,9 +1,4 @@
-'use strict';
-
-/* eslint global-require: "off" */
-module.exports = {
-  ExceptionHandler: require('./exceptionHandler'),
-  ResponseBuilder: require('./responseBuilder'),
-  FixtureGenerator: require('./fixtureGenerator'),
-  Validator: require('express-validator'),
-};
+export { default as ExceptionHandler } from './exceptionHandler';
+export { default as FixtureGenerator } from './fixtureGenerator';
+export { default as ResponseBuilder } from './responseBuilder';
+export { default as Validator } from 'express-validator';

@@ -1,23 +1,22 @@
-'use strict';
+import VError from '@voiceflow/verror';
+import type { AxiosError } from 'axios';
+import Promise from 'bluebird';
+import { NextFunction, Request, Response } from 'express';
+import * as ExpressValidator from 'express-validator';
+import { HttpStatus } from 'http-status';
+import { DateTime } from 'luxon';
 
-const _ = require('lodash');
-const Promise = require('bluebird');
-const VError = require('@voiceflow/verror');
-const { DateTime } = require('luxon');
-const { validationResult } = require('express-validator');
+import log from './logger';
+import { ErrorResponse, RawRoute, Route } from './types';
 
-const log = require('../logger');
-
-module.exports = function ResponseBuilder() {
-  const self = {};
-
+class ResponseBuilder {
   /**
    * Determine http code from error
-   * @param {Error} error error object or something and inheirits from it
-   * @return {number} http code
+   * @param error error object or something and inheirits from it
+   * @return http code
    * @private
    */
-  self._getCodeFromError = (error) => {
+  static getCodeFromError(error: Error): number {
     if (error instanceof VError) {
       return error.code;
     }
@@ -25,23 +24,22 @@ module.exports = function ResponseBuilder() {
     log.warn(`Unexpected error type: '${error.name}' from '${error.stack}'`);
 
     return VError.HTTP_STATUS.INTERNAL_SERVER_ERROR;
-  };
+  }
 
   /**
    * Handle normal response
-   * @param {*} data data to be returned from the endpoint
-   * @param {number} [codeOverride] optionally override the default OK-200 code
-   * @return {{versions: *, code: number, status: string, dateTime: string, timestamp: number, message: *, data: *}}
-   * @private
+   * @param data data to be returned from the endpoint
+   * @param codeOverride optionally override the default OK-200 code
    */
-  self._okResponse = (data, codeOverride) => {
+  private static okResponse<T>(data: T, codeOverride?: HttpStatus) {
     const dateTime = DateTime.utc();
     const code = codeOverride || VError.HTTP_STATUS.OK;
     const response = {
       code,
-      status: VError.HTTP_STATUS[code],
+      status: VError.HTTP_STATUS[(code as unknown) as keyof typeof VError.HTTP_STATUS],
       dateTime: dateTime.toISO(),
       timestamp: dateTime.valueOf(),
+      data: undefined as T | undefined,
     };
 
     if (data) {
@@ -49,15 +47,13 @@ module.exports = function ResponseBuilder() {
     }
 
     return response;
-  };
+  }
 
   /**
    * Return error object with only necessary props according to axios docs https://github.com/axios/axios#handling-errors
-   * @param {Error} axiosError axios error object
-   * @return {number} http code
-   * @private
+   * @param axiosError axios error object
    */
-  self._getAxiosError = (axiosError) => {
+  private static getAxiosError(axiosError: AxiosError) {
     const errorInfo = {
       config: axiosError.config,
     };
@@ -86,36 +82,40 @@ module.exports = function ResponseBuilder() {
       ...errorInfo,
       message: axiosError.message,
     };
-  };
+  }
 
   /**
    * Handle error response
-   * @param {Error} error error object or something and inheirits from it
-   * @param {number} [codeOverride] optionally override the code specified in the error
-   * @param {Object} req request object
-   * @return {{versions: *, code: number, status: string, dateTime: string, timestamp: number, message: *, data: *}}
-   * @private
+   * @param error error object or something and inheirits from it
+   * @param codeOverride optionally override the code specified in the error
+   * @param req request object
    */
-  self._errorResponse = (error, codeOverride, req) => {
-    if (error && error.isAxiosError) {
-      log.error(`@backend-utils:errorResponse - error:axios:${JSON.stringify(self._getAxiosError(error))}`);
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  private static errorResponse<T>(
+    error: (Error & { data?: T }) | string,
+    codeOverride?: HttpStatus,
+    req?: Request & { user?: { id: number } }
+  ): ErrorResponse<T> {
+    if (error && (error as any).isAxiosError) {
+      log.error(`@backend-utils:errorResponse - error:axios:${JSON.stringify(ResponseBuilder.getAxiosError(error as AxiosError))}`);
     }
 
     if (!(error instanceof Error)) {
-      if (error instanceof String) {
-        return self._errorResponse(new VError(error), codeOverride);
+      // TODO: why are we checking `instanceof String` here?
+      if (typeof error === 'string' || (error as any) instanceof String) {
+        return ResponseBuilder.errorResponse(new VError(error), codeOverride);
       }
 
-      return self._errorResponse(new VError('Unexpected error'), codeOverride);
+      return ResponseBuilder.errorResponse(new VError('Unexpected error'), codeOverride);
     }
 
     const dateTime = DateTime.utc();
-    const code = codeOverride || self._getCodeFromError(error);
+    const code = (codeOverride == null ? null : Number(codeOverride)) ?? ResponseBuilder.getCodeFromError(error);
 
-    const response = {
+    const response: ErrorResponse<T> = {
       data: error.data || {
         code,
-        status: VError.HTTP_STATUS[code],
+        status: VError.HTTP_STATUS[(code as unknown) as keyof typeof VError.HTTP_STATUS] as string,
         dateTime: dateTime.toISO(),
         timestamp: dateTime.valueOf(),
       },
@@ -123,24 +123,26 @@ module.exports = function ResponseBuilder() {
     };
 
     if (error.message && !error.data) {
-      response.data.data = error.message;
+      (response.data as any).data = error.message;
     }
 
     if (response.code >= 500) {
       log.error(
-        `500+ error: ${req.originalUrl} ${req.user ? ` User ID: ${req.user.id}` : ''} ${error.stack} ${error.data ? JSON.stringify(error.data) : ''}`
+        `500+ error: ${req?.originalUrl} ${req?.user ? ` User ID: ${req?.user.id}` : ''} ${error.stack} ${
+          error.data ? JSON.stringify(error.data) : ''
+        }`
       );
     }
 
     return response;
-  };
+  }
 
-  self.validationResult = (req, __, next) => {
-    let errors = validationResult(req).array({ onlyFirstError: true });
+  validationResult = (req: Request, __: Response, next: NextFunction): void => {
+    const errors = ExpressValidator.validationResult(req).array({ onlyFirstError: true });
 
     if (errors.length) {
-      errors = errors.reduce((errs, err) => Object.assign(errs, { [err.param]: { message: err.msg } }), {});
-      throw new VError('validation', VError.HTTP_STATUS.BAD_REQUEST, { errors });
+      const errorMap = errors.reduce((errs, err) => Object.assign(errs, { [err.param]: { message: err.msg } }), {});
+      throw new VError('validation', VError.HTTP_STATUS.BAD_REQUEST, { errors: errorMap });
     }
 
     return next();
@@ -148,32 +150,36 @@ module.exports = function ResponseBuilder() {
 
   /**
    * Use express response object to respond with data or error
-   * @param {Promise|Function} dataPromise promise that will resolve into a respnse or reject with an error
-   * @param {number} [successCodeOverride] optionally override the success code specified in the error or the default OK
-   * @param {number} [failureCodeOverride] optionally override the code specified in the error or the default 500
-   * @return {Promise<void>}
+   * @param dataPromise promise that will resolve into a respnse or reject with an error
    */
-  self.route = (dataPromise, successCodeOverride, failureCodeOverride) => {
+  /* eslint-disable no-param-reassign */
+  // TODO: split this into multiple functions, it has a very confusing pattern right now
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  route(dataPromise: RawRoute, successCodeOverride?: HttpStatus, failureCodeOverride?: HttpStatus): Route {
     if (dataPromise.validations && !dataPromise.validationsApplied) {
       dataPromise.validationsApplied = true;
-      const expressMiddlewares = [...self.route(Object.values(dataPromise.validations)), self.route(self.validationResult), self.route(dataPromise)];
+      const expressMiddlewares: { validations?: any } & any[] = [
+        ...(this.route(Object.values(dataPromise.validations) as any) as any),
+        this.route(this.validationResult as any),
+        this.route(dataPromise),
+      ];
       expressMiddlewares.validations = dataPromise.validations;
-      return expressMiddlewares;
+      return expressMiddlewares as any;
     }
 
     if (dataPromise.callback) {
-      const callbackFunction = (...args) => self.route(dataPromise(...args));
+      const callbackFunction: Route = (...args: any[]) => this.route((dataPromise as any)(...args));
       callbackFunction.callback = true;
       return callbackFunction;
     }
 
     if (Array.isArray(dataPromise)) {
-      return dataPromise.map((route) => self.route(route, successCodeOverride, failureCodeOverride));
+      return dataPromise.map((route) => this.route(route, successCodeOverride, failureCodeOverride)) as any;
     }
 
     dataPromise.route = true;
 
-    return async (req, res, next) => {
+    return (async (req: Request, res: Response, next: NextFunction) => {
       if (successCodeOverride && !Object.values(VError.HTTP_STATUS).includes(successCodeOverride)) {
         log.error('successCodeOverride must be a valid HTTP code, ignoring');
         successCodeOverride = undefined;
@@ -184,33 +190,35 @@ module.exports = function ResponseBuilder() {
         failureCodeOverride = undefined;
       }
 
-      let nextCalled = null;
-      const nextCheck = (route) => {
+      let nextCalled: (() => void) | null = null;
+      const nextCheck: NextFunction = (route: any) => {
         nextCalled = () => next(route);
       };
 
-      await Promise.try(() => (_.isFunction(dataPromise) ? dataPromise(req, res, nextCheck) : dataPromise))
+      await Promise.try(() => (typeof dataPromise === 'function' ? (dataPromise as any)(req, res, nextCheck) : dataPromise))
         .then((data) => {
           if (data instanceof Error) {
-            return self._errorResponse(data, failureCodeOverride, req);
+            return ResponseBuilder.errorResponse(data, failureCodeOverride, req);
           }
 
-          return self._okResponse(data, successCodeOverride);
+          return ResponseBuilder.okResponse(data, successCodeOverride);
         })
-        .catch((err) => self._errorResponse(err, failureCodeOverride, req))
+        .catch((err) => ResponseBuilder.errorResponse(err, failureCodeOverride, req))
         .then((output) => {
           if (res.headersSent) {
             return;
           }
 
+          // eslint-disable-next-line promise/always-return
           if (nextCalled) {
             nextCalled();
             return;
           }
-          res.status(output.code).json(output.data);
+          res.status(output.code as number).json(output.data);
         });
-    };
-  };
+    }) as any;
+  }
+  /* eslint-enable no-param-reassign */
+}
 
-  return self;
-};
+export default ResponseBuilder;

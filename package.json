@@ -12,58 +12,69 @@
     }
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.33",
+    "@types/chai": "^4.2.16",
+    "@types/express": "^4.17.11",
+    "@types/lodash": "^4.14.168",
+    "@types/luxon": "^1.26.4",
+    "@types/sinon": "^10.0.0",
     "@voiceflow/logger": "1.5.2",
     "@voiceflow/verror": "^1.1.0",
     "bluebird": "^3.7.2",
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
+    "express": "^4.17.1",
     "express-validator": "^6.3.0",
     "http-status": "^1.4.2",
     "lodash": "^4.17.11",
     "luxon": "^1.21.3",
-    "sinon": "^7.5.0"
+    "sinon": "^10.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "@types/lodash": "^4.14.168",
-    "@voiceflow/eslint-config": "^2.0.5",
-    "@voiceflow/git-branch-check": "^1.1.3",
+    "@commitlint/cli": "^12.1.1",
+    "@types/axios": "^0.14.0",
+    "@types/mocha": "^8.2.2",
+    "@types/supertest": "^2.0.11",
+    "@voiceflow/commitlint-config": "^1.0.2",
+    "@voiceflow/eslint-config": "^3.1.0",
+    "@voiceflow/git-branch-check": "^1.2.0",
     "@voiceflow/prettier-config": "^1.0.5",
+    "@voiceflow/semantic-release-config": "^1.0.8",
+    "@voiceflow/tsconfig": "^1.0.0",
+    "@zerollup/ts-transform-paths": "^1.7.18",
     "commitizen": "^4.2.3",
-    "cz-conventional-changelog": "^2.1.0",
-    "depcheck": "^1.3.1",
-    "eslint": "^6.0.1",
-    "express": "^4.17.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "depcheck": "^1.4.0",
+    "eslint": "^7.25.0",
     "fixpack": "^4.0.0",
     "husky": "^4.3.8",
-    "lint-staged": "^10.5.3",
-    "mocha": "^6.1.4",
+    "lint-staged": "^10.5.4",
+    "mocha": "^8.3.2",
     "nyc": "^15.1.0",
-    "prettier": "^1.19.1",
-    "prettier-eslint-cli": "^5.0.0",
-    "supertest": "^4.0.2"
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "supertest": "^6.1.3",
+    "ttypescript": "^1.5.12",
+    "typescript": "^4.2.4"
   },
   "files": [
-    "lib/**",
-    "config/**",
-    "app/**",
-    "*.js",
-    "!scratch.*"
+    "build/**"
   ],
   "homepage": "https://github.com/voiceflow/backend-utils#readme",
   "keywords": [
     "utilities"
   ],
   "license": "ISC",
-  "main": "index.js",
+  "main": "build/index.js",
   "prettier": "@voiceflow/prettier-config",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/voiceflow/backend-utils.git"
   },
   "scripts": {
+    "build": "yarn clean && ttsc --project ./tsconfig.build.json",
+    "clean": "rimraf build",
     "commit": "cz",
-    "lint": "eslint \"**/*.js\"",
+    "lint": "eslint \"**/*.{js,ts}\"",
     "lint:fix": "yarn lint --fix",
     "lint:quiet": "yarn lint --quiet",
     "lint:report": "yarn lint --format json -o sonar/report.json",
@@ -73,5 +84,6 @@
     "test:integration": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.it.js'",
     "test:single": "mocha --opts ./config/tests/mocha.opts",
     "test:unit": "nyc mocha --opts ./config/tests/mocha.opts 'tests/**/*.unit.js'"
-  }
+  },
+  "types": "build/index.d.ts"
 }

@@ -1,12 +1,10 @@
-'use strict';
-
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
+import VError from '@voiceflow/verror';
+import { expect } from 'chai';
+import sinon from 'sinon';
 
-const sinon = require('sinon');
-const VError = require('@voiceflow/verror');
-const { ExceptionHandler, ResponseBuilder } = require('../../lib');
+import { ExceptionHandler, ResponseBuilder } from '../src';
 
 describe('exceptionHandler unit tests', () => {
   it('handles 404', async () => {

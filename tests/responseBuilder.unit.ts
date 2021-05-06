@@ -1,13 +1,11 @@
-'use strict';
-
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
+import VError from '@voiceflow/verror';
+import { expect } from 'chai';
+import HttpStatus from 'http-status';
+import sinon from 'sinon';
 
-const HttpStatus = require('http-status');
-const sinon = require('sinon');
-const VError = require('@voiceflow/verror');
-const { ResponseBuilder } = require('../../lib');
+import { ResponseBuilder } from '../src';
 
 describe('responseBuilder unit tests', () => {
   it('returns ok response', async () => {
@@ -53,7 +51,7 @@ describe('responseBuilder unit tests', () => {
   it('returns ok response with no data', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve) => resolve());
+    const dataPromise = Promise.resolve();
 
     await responseBuilder.route(dataPromise)({ originalUrl: '/test' }, res);
 
@@ -70,7 +68,7 @@ describe('responseBuilder unit tests', () => {
   it('returns bad response', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve, reject) => reject(new VError('boom')));
+    const dataPromise = Promise.reject(new VError('boom'));
 
     await responseBuilder.route(dataPromise)({ originalUrl: '/test' }, res);
 
