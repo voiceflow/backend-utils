@@ -23,7 +23,6 @@
     "bluebird": "^3.7.2",
     "chai": "^4.3.4",
     "express": "^4.17.1",
-    "express-validator": "^6.3.0",
     "http-status": "^1.4.2",
     "lodash": "^4.17.11",
     "luxon": "^1.21.3",
@@ -47,6 +46,7 @@
     "eslint": "^7.25.0",
     "fixpack": "^4.0.0",
     "husky": "^4.3.8",
+    "install-peers-cli": "^2.2.0",
     "lint-staged": "^10.5.4",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
@@ -66,6 +66,9 @@
   ],
   "license": "ISC",
   "main": "build/index.js",
+  "peerDependencies": {
+    "express-validator": "^6.3.0"
+  },
   "prettier": "@voiceflow/prettier-config",
   "repository": {
     "type": "git",

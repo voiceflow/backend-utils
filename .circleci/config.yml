@@ -18,6 +18,9 @@ jobs:
     steps:
       - checkout
       - vfcommon/install_node_modules
+      - run:
+          name: Install Peer Dependencies
+          command: yarn install-peers -f
       - vfcommon/lint_source
       - vfcommon/lint_report
       - vfcommon/dependency_tests:
