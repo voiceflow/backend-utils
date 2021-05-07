@@ -9,7 +9,7 @@ defaults:
         - /cherry-pick-rebase-pull-request-.*/
 
 orbs:
-  vfcommon: voiceflow/common@0.0.72
+  vfcommon: voiceflow/common@0.0.121
   sonarcloud: sonarsource/sonarcloud@1.0.2
 
 jobs:
@@ -17,7 +17,8 @@ jobs:
     executor: vfcommon/default-executor
     steps:
       - checkout
-      - vfcommon/install_node_modules
+      - vfcommon/install_node_modules:
+          avoid_post_install_scripts: false
       - vfcommon/lint_source
       - vfcommon/lint_report
       - vfcommon/dependency_tests:
@@ -35,6 +36,7 @@ workflows:
           filters:
             <<: *autorebase_filters
       - vfcommon/release:
+          avoid_post_install_scripts: false
           context: dev-test
           requires:
             - build-and-test
