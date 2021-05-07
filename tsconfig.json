@@ -1,0 +1,16 @@
+{
+  "extends": "@voiceflow/tsconfig",
+  "compilerOptions": {
+    "baseUrl": "./src"
+  },
+  "compileOnSave": false,
+  "include": [
+    "src/**/*.ts",
+    "typings/**/*.d.ts",
+    "tests/**/*.ts"
+  ],
+  "exclude": [
+    "build/**",
+    "node_modules/**"
+  ]
+}

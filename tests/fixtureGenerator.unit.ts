@@ -1,10 +1,7 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { expect } from 'chai';
 
-/* eslint-disable no-unused-expressions */
-
-const { expect } = require('chai');
-
-const { FixtureGenerator } = require('../../lib');
+import { FixtureGenerator } from '../src';
 
 describe('createFixture', () => {
   it('returns correct fixtures', async () => {
@@ -38,6 +35,7 @@ describe('createFixture', () => {
         },
       },
     };
+
     const generatedFixtures = await FixtureGenerator.createFixture(serviceManager);
     // console.log(generatedFixtures);
     expect(typeof generatedFixtures.start).to.eql('function');

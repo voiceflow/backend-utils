@@ -1,12 +1,9 @@
-'use strict';
+import { expect } from 'chai';
+import express from 'express';
+import sinon from 'sinon';
+import request from 'supertest';
 
-const { expect } = require('chai');
-const sinon = require('sinon');
-const request = require('supertest');
-
-const express = require('express');
-
-const { ResponseBuilder } = require('../../lib');
+import { ResponseBuilder } from '../src';
 
 const responseBuilder = new ResponseBuilder();
 
@@ -19,10 +16,7 @@ describe('responseBuilder integration tests', () => {
 
     app.get('/', responseBuilder.route(middleware), responseBuilder.route(controller));
 
-    await request(app)
-      .get('/')
-      .expect('Content-Type', /json/)
-      .expect(200, { done: 'foo' });
+    await request(app).get('/').expect('Content-Type', /json/).expect(200, { done: 'foo' });
 
     expect(middleware.callCount).to.eql(1);
     expect(controller.callCount).to.eql(1);
@@ -38,10 +32,7 @@ describe('responseBuilder integration tests', () => {
 
     app.get('/', responseBuilder.route(middleware), responseBuilder.route(controller));
 
-    await request(app)
-      .get('/')
-      .expect('Content-Type', /json/)
-      .expect(200, { done: 'early' });
+    await request(app).get('/').expect('Content-Type', /json/).expect(200, { done: 'early' });
 
     expect(middleware.callCount).to.eql(1);
     expect(controller.callCount).to.eql(0);
@@ -57,10 +48,7 @@ describe('responseBuilder integration tests', () => {
 
     app.get('/', responseBuilder.route(middleware), responseBuilder.route(controller));
 
-    await request(app)
-      .get('/')
-      .expect('Content-Type', /text/)
-      .expect(200, 'foooo');
+    await request(app).get('/').expect('Content-Type', /text/).expect(200, 'foooo');
 
     expect(middleware.callCount).to.eql(1);
     expect(controller.callCount).to.eql(1);

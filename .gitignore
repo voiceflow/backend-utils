@@ -65,3 +65,6 @@ package-lock.json
 
 #Code coverage
 nyc_coverage
+
+# compiled files
+build/

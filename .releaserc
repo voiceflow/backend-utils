@@ -1,0 +1,3 @@
+{
+  "extends": ["@voiceflow/semantic-release-config"]
+}
