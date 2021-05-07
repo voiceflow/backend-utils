@@ -20,6 +20,7 @@
     "axios",
     "fixpack",
     "husky",
-    "lint-staged"
+    "lint-staged",
+    "install-peers-cli"
   ]
 }
