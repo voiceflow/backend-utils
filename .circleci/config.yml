@@ -17,8 +17,7 @@ jobs:
     executor: vfcommon/default-executor
     steps:
       - checkout
-      - vfcommon/install_node_modules:
-          avoid_post_install_scripts: false
+      - vfcommon/install_node_modules
       - vfcommon/lint_source
       - vfcommon/lint_report
       - vfcommon/dependency_tests:
@@ -36,7 +35,6 @@ workflows:
           filters:
             <<: *autorebase_filters
       - vfcommon/release:
-          avoid_post_install_scripts: false
           context: dev-test
           requires:
             - build-and-test
