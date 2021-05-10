@@ -82,6 +82,7 @@
     "lint:quiet": "yarn lint --quiet",
     "lint:report": "yarn lint --format json -o sonar/report.json",
     "prepare": "npm run build",
+    "test": "yarn test:run",
     "test:dependencies": "depcheck",
     "test:integration": "NODE_ENV=test nyc ts-mocha --paths --config ./config/tests/.mocharc.yml 'tests/**/*.it.ts'",
     "test:run": "NODE_ENV=test nyc ts-mocha --paths --config ./config/tests/.mocharc.yml 'tests/**/*.{unit,it}.ts'",
