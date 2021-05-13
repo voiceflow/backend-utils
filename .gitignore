@@ -61,7 +61,10 @@ jspm_packages/
 package-lock.json
 
 #Code coverage
-nyc_coverage
+nyc_coverage*
 
 # compiled files
 build/
+
+#Sonar report
+sonar/
