@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/axios": "^0.14.0",
     "@types/mocha": "^8.2.2",
     "@types/supertest": "^2.0.11",
