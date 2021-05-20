@@ -2,6 +2,7 @@
   "name": "@voiceflow/backend-utils",
   "description": "Junk drawer of utility functions",
   "version": "0.0.0",
+  "private": true,
   "author": "Voiceflow",
   "bugs": {
     "url": "https://github.com/voiceflow/backend-utils/issues"
