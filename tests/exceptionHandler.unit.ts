@@ -2,6 +2,7 @@
 
 import VError from '@voiceflow/verror';
 import { expect } from 'chai';
+import { Request } from 'express';
 import sinon from 'sinon';
 
 import { ExceptionHandler, ResponseBuilder } from '../src';
@@ -13,7 +14,7 @@ describe('exceptionHandler unit tests', () => {
     const req = {
       originalUrl: 'http://google.com',
       method: 'POST',
-    };
+    } as Request;
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
 
     await exceptionHandler.handleNotFound(req, res);
@@ -31,7 +32,7 @@ describe('exceptionHandler unit tests', () => {
     const exceptionHandler = new ExceptionHandler(new ResponseBuilder());
 
     const error = new VError('boom');
-    const req = {};
+    const req = {} as Request;
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
     const next = sinon.stub();
 
