@@ -21,6 +21,7 @@
     "fixpack",
     "husky",
     "lint-staged",
-    "install-peers-cli"
+    "install-peers-cli",
+    "ioredis"
   ]
 }
