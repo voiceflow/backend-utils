@@ -25,3 +25,7 @@ export interface ServiceManager<M = {}, C = {}> {
   middlewares: M;
   controllers: C;
 }
+
+export abstract class AbstractMiddleware<S extends Record<string, any>, C extends Record<string, any>> {
+  constructor(public services: S, public config: C) {}
+}
