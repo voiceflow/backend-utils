@@ -6,4 +6,4 @@ exit: true
 recursive: true
 
 spec:
-  - config/test/setup.ts
+  - config/tests/setup.ts
