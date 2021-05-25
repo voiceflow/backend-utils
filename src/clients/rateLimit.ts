@@ -10,16 +10,6 @@ const RATE_LIMITER_PUBLIC_SUFFIX = '-rate-limiter-public';
 // private rate limiter - req from clients with authorization (auth_vf token or api key)
 const RATE_LIMITER_PRIVATE_SUFFIX = '-rate-limiter-private';
 
-export interface RateLimiterOptions {
-  points: number;
-  duration: number;
-}
-
-export interface RateLimiterConfig {
-  public: RateLimiterOptions;
-  private: RateLimiterOptions;
-}
-
 export const RateLimitClient = <C extends RateLimitConfig>(
   serviceName: string,
   redis: IORedis.Redis | null,
