@@ -2,7 +2,7 @@ module.exports = {
   extends: ['@voiceflow/eslint-config', '@voiceflow/eslint-config/typescript'],
   overrides: [
     {
-      files: ['test/**/*'],
+      files: ['config/**/*', 'test/**/*'],
       extends: ['@voiceflow/eslint-config/utility', '@voiceflow/eslint-config/mocha'],
       rules: {
         // off

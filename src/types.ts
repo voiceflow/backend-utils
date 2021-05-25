@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types, max-classes-per-file */
 import { NextFunction, Request, Response } from 'express';
 import { ValidationChain } from 'express-validator';
 
@@ -20,8 +21,22 @@ export interface ErrorResponse<T> {
   code: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export interface ServiceManager<M = {}, C = {}> {
   middlewares: M;
   controllers: C;
+}
+
+export abstract class AbstractMiddleware<S extends Record<string, any>, C extends Record<string, any>> {
+  constructor(public services: S, public config: C) {}
+}
+
+export abstract class AbstractManager<S extends Record<string, any>, C extends Record<string, any>> {
+  constructor(public services: S, public config: C) {}
+}
+
+export interface RateLimitConfig {
+  RATE_LIMITER_POINTS_PUBLIC: number;
+  RATE_LIMITER_DURATION_PUBLIC: number;
+  RATE_LIMITER_POINTS_PRIVATE: number;
+  RATE_LIMITER_DURATION_PRIVATE: number;
 }

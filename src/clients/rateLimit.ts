@@ -1,6 +1,8 @@
 import type IORedis from 'ioredis';
 import { RateLimiterMemory, RateLimiterRedis, RateLimiterStoreAbstract } from 'rate-limiter-flexible';
 
+import { RateLimitConfig } from '../types';
+
 export type RateLimiter = RateLimiterStoreAbstract;
 
 // public rate limiter - req from creator-app or clients without an authorization
@@ -18,22 +20,22 @@ export interface RateLimiterConfig {
   private: RateLimiterOptions;
 }
 
-export const RateLimiterClient = (
+export const RateLimitClient = <C extends RateLimitConfig>(
   serviceName: string,
   redis: IORedis.Redis | null,
-  { public: _public, private: _private }: RateLimiterConfig
+  config: C
 ): { public: RateLimiter; private: RateLimiter } => {
   if (redis) {
     return {
       public: new RateLimiterRedis({
-        points: _public.points,
-        duration: _public.duration,
+        points: config.RATE_LIMITER_POINTS_PUBLIC,
+        duration: config.RATE_LIMITER_DURATION_PUBLIC,
         keyPrefix: `${serviceName}${RATE_LIMITER_PUBLIC_SUFFIX}`,
         storeClient: redis,
       }),
       private: new RateLimiterRedis({
-        points: _private.points,
-        duration: _private.duration,
+        points: config.RATE_LIMITER_POINTS_PRIVATE,
+        duration: config.RATE_LIMITER_DURATION_PRIVATE,
         keyPrefix: `${serviceName}${RATE_LIMITER_PRIVATE_SUFFIX}`,
         storeClient: redis,
       }),
@@ -42,13 +44,13 @@ export const RateLimiterClient = (
 
   return {
     public: new RateLimiterMemory({
-      points: _public.points,
-      duration: _public.duration,
+      points: config.RATE_LIMITER_POINTS_PUBLIC,
+      duration: config.RATE_LIMITER_DURATION_PUBLIC,
       keyPrefix: `${serviceName}${RATE_LIMITER_PUBLIC_SUFFIX}`,
     }),
     private: new RateLimiterMemory({
-      points: _private.points,
-      duration: _private.duration,
+      points: config.RATE_LIMITER_POINTS_PRIVATE,
+      duration: config.RATE_LIMITER_DURATION_PRIVATE,
       keyPrefix: `${serviceName}${RATE_LIMITER_PRIVATE_SUFFIX}`,
     }),
   };
