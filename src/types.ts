@@ -30,8 +30,12 @@ export abstract class AbstractMiddleware<S extends Record<string, any>, C extend
   constructor(public services: S, public config: C) {}
 }
 
-export abstract class AbstractManager<S extends Record<string, any>, C extends Record<string, any>> {
-  constructor(public services: S, public config: C) {}
+export abstract class AbstractManager<S extends Record<string, any>, C extends Record<string, any>, U extends Record<string, any> = {}> {
+  services: S & U;
+
+  constructor(services: S, public config: C) {
+    this.services = services as S & U;
+  }
 }
 
 export interface RateLimitConfig {
