@@ -29,7 +29,7 @@ describe('rateLimit middleware unit tests', () => {
       expect(res.setHeader.args).to.eql([
         ['X-RateLimit-Limit', maxPoints],
         ['X-RateLimit-Remaining', rateLimiterRes.remainingPoints],
-        ['X-RateLimit-Reset', new Date(clock.now + rateLimiterRes.msBeforeNext).toString()],
+        ['X-RateLimit-Reset', new Date(clock.now + rateLimiterRes.msBeforeNext).toISOString()],
       ]);
     });
   });

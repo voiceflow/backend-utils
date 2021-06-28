@@ -13,7 +13,7 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
   static setHeaders(res: Response, rateLimiterRes: RateLimiterRes, maxPoints: number) {
     res.setHeader('X-RateLimit-Limit', maxPoints);
     res.setHeader('X-RateLimit-Remaining', rateLimiterRes.remainingPoints);
-    res.setHeader('X-RateLimit-Reset', new Date(Date.now() + rateLimiterRes.msBeforeNext).toString());
+    res.setHeader('X-RateLimit-Reset', new Date(Date.now() + rateLimiterRes.msBeforeNext).toISOString());
   }
 
   static isUnauthorizedRequest(req: Request) {
@@ -28,8 +28,6 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
       const rateLimiterRes = await rateLimiterClient.consume(resource!);
 
       RateLimitMiddleware.setHeaders(res, rateLimiterRes, maxPoints);
-
-      return next();
     } catch (rateLimiterRes) {
       res.setHeader('Retry-After', Math.floor(rateLimiterRes.msBeforeNext / 1000));
 
@@ -37,6 +35,8 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
 
       throw new VError('Too Many Request', VError.HTTP_STATUS.TOO_MANY_REQUESTS);
     }
+
+    return next();
   }
 
   async versionConsume(req: Request, res: Response, next: NextFunction) {
