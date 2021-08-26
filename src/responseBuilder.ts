@@ -1,15 +1,51 @@
 import VError from '@voiceflow/verror';
+import Ajv from 'ajv/dist/2019';
+import addFormats from 'ajv-formats';
 import type { AxiosError } from 'axios';
 import Promise from 'bluebird';
 import { NextFunction, Request, Response } from 'express';
-import * as ExpressValidator from 'express-validator';
 import { HttpStatus } from 'http-status';
 import { DateTime } from 'luxon';
 
 import log from './logger';
-import { ErrorResponse, RawRoute, Route } from './types';
+import { RouteValidations } from './types';
+import { ErrorResponse, RawRoute, Route } from './types/backend';
 
 class ResponseBuilder {
+  ajv = addFormats(
+    new Ajv({
+      // To change data type, when possible, to match the type(s) in the schema. https://ajv.js.org/coercion.html
+      coerceTypes: true,
+      // Use the `default` property in fields as a default value (instead of just a comment) https://ajv.js.org/options.html#usedefaults
+      useDefaults: true,
+      verbose: true,
+      keywords: [
+        // From Typebox https://github.com/sinclairzx81/typebox#validation
+        'kind',
+        'modifier',
+        // From us
+        'error',
+        'transform',
+      ],
+    }),
+    [
+      'date-time',
+      'time',
+      'date',
+      'email',
+      'hostname',
+      'ipv4',
+      'ipv6',
+      'uri',
+      'uri-reference',
+      'uuid',
+      'uri-template',
+      'json-pointer',
+      'relative-json-pointer',
+      'regex',
+    ]
+  );
+
   /**
    * Determine http code from error
    * @param error error object or something and inheirits from it
@@ -137,13 +173,51 @@ class ResponseBuilder {
     return response;
   }
 
-  validationResult = (req: Request, __: Response, next: NextFunction): void => {
-    const errors = ExpressValidator.validationResult(req).array({ onlyFirstError: true });
+  validation = (validations: RouteValidations) => (req: Request, __: Response, next: NextFunction): void => {
+    Object.entries(validations).forEach(([_kind, schema]) => {
+      const kind = _kind as keyof typeof validations;
 
-    if (errors.length) {
-      const errorMap = errors.reduce((errs, err) => Object.assign(errs, { [err.param]: { message: err.msg } }), {});
-      throw new VError('validation', VError.HTTP_STATUS.BAD_REQUEST, { errors: errorMap });
-    }
+      let data: unknown;
+      let dataVar: string;
+
+      switch (kind) {
+        case 'RESPONSE_BODY':
+          break;
+        case 'BODY':
+          data = req.body;
+          dataVar = 'body';
+          break;
+        case 'QUERY':
+          data = req.query;
+          dataVar = 'query';
+          break;
+        case 'HEADERS':
+          data = req.headers;
+          dataVar = 'headers';
+          break;
+        case 'PARAMS':
+          data = req.params;
+          dataVar = 'params';
+          break;
+        default:
+          throw new RangeError(`Unknown kind: ${kind}`);
+      }
+
+      if (schema.transform) {
+        try {
+          schema.transform(data);
+        } catch {
+          // Ignore errors during transform
+          // Usually if the transform function is erroring it's because someone is sending very invalid data
+        }
+      }
+
+      const valid = this.ajv.validate(schema!, data);
+
+      if (!valid) {
+        throw new VError('validation', VError.HTTP_STATUS.BAD_REQUEST, { errors: this.ajv.errorsText(undefined, { dataVar: dataVar! }) });
+      }
+    });
 
     return next();
   };
@@ -158,12 +232,11 @@ class ResponseBuilder {
   route(dataPromise: RawRoute, successCodeOverride?: HttpStatus, failureCodeOverride?: HttpStatus): Route {
     if (dataPromise.validations && !dataPromise.validationsApplied) {
       dataPromise.validationsApplied = true;
-      const expressMiddlewares: { validations?: any } & any[] = [
-        ...(this.route(Object.values(dataPromise.validations) as any) as any),
-        this.route(this.validationResult as any),
+      const expressMiddlewares: Array<(...params: any[]) => any> = [
+        this.route(this.validation(dataPromise.validations) as any),
         this.route(dataPromise),
       ];
-      expressMiddlewares.validations = dataPromise.validations;
+
       return expressMiddlewares as any;
     }
 
@@ -195,6 +268,8 @@ class ResponseBuilder {
         nextCalled = () => next(route);
       };
 
+      // HERE THIS IS IMPORTANT
+      // THIS IS WHERE IT RETURNS THE INPUT OwO
       await Promise.try(() => (typeof dataPromise === 'function' ? (dataPromise as any)(req, res, nextCheck) : dataPromise))
         .then((data) => {
           if (data instanceof Error) {

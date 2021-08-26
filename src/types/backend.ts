@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-types, max-classes-per-file */
 import { NextFunction, Request, Response } from 'express';
-import { ValidationChain } from 'express-validator';
+
+import { RouteValidations } from './schema';
 
 export type AsyncMiddleware = (request: Request, response: Response, next: NextFunction) => Promise<void>;
-export type Route = {
+export interface Route {
   (...args: any[]): Route | Route[] | AsyncMiddleware;
 
   callback?: boolean;
-};
+}
 
 export type RawRoute = AsyncMiddleware & {
   callback?: boolean;
   route?: boolean;
-  validations?: Record<string, ValidationChain>;
+  validations?: RouteValidations;
   validationsApplied?: boolean;
 };
 
