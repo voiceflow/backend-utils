@@ -140,7 +140,7 @@ export class OpenAPI {
 
     return {
       description: schema.description,
-      required: schema.required,
+      required: schema.required.length > 0,
       content: {
         'application/json': {
           schema: schema as any,
