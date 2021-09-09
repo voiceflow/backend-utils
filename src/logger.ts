@@ -1,6 +1,6 @@
 import Logger from '@voiceflow/logger';
 
-const options = ['local', 'test'].includes(process.env.NODE_ENV!) ? { level: 'info' as any, pretty: true } : {};
+const options = ['local', 'test'].includes(process.env.NODE_ENV!) ? { level: 'info' as any, pretty: true } : { pretty: true };
 
 const log = new Logger(options);
 

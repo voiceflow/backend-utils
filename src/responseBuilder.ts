@@ -1,12 +1,12 @@
 import VError from '@voiceflow/verror';
-import Ajv from 'ajv/dist/2019';
 import addFormats from 'ajv-formats';
+import Ajv from 'ajv/dist/2019';
 import type { AxiosError } from 'axios';
 import Promise from 'bluebird';
 import { NextFunction, Request, Response } from 'express';
 import { HttpStatus } from 'http-status';
 import { DateTime } from 'luxon';
-
+import { OpenAPI } from './OpenAPI';
 import log from './logger';
 import { RouteValidations } from './types';
 import { ErrorResponse, RawRoute, Route } from './types/backend';
@@ -45,6 +45,12 @@ class ResponseBuilder {
       'regex',
     ]
   );
+
+  public importSchemas(openAPI: OpenAPI) {
+    const schemas = [...openAPI.schemas.values()];
+
+    this.ajv.addSchema(schemas);
+  }
 
   /**
    * Determine http code from error
@@ -182,7 +188,7 @@ class ResponseBuilder {
 
       switch (kind) {
         case 'RESPONSE_BODY':
-          break;
+          return next();
         case 'BODY':
           data = req.body;
           dataVar = 'body';
@@ -203,7 +209,7 @@ class ResponseBuilder {
           throw new RangeError(`Unknown kind: ${kind}`);
       }
 
-      if (schema.transform) {
+      if ('transform' in schema) {
         try {
           schema.transform(data);
         } catch {
@@ -268,8 +274,6 @@ class ResponseBuilder {
         nextCalled = () => next(route);
       };
 
-      // HERE THIS IS IMPORTANT
-      // THIS IS WHERE IT RETURNS THE INPUT OwO
       await Promise.try(() => (typeof dataPromise === 'function' ? (dataPromise as any)(req, res, nextCheck) : dataPromise))
         .then((data) => {
           if (data instanceof Error) {

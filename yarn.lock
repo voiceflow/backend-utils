@@ -736,6 +736,11 @@
   dependencies:
     "@sinonjs/fake-timers" "^7.0.4"
 
+"@types/sinonjs__fake-timers@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-6.0.3.tgz#79df6f358ae8f79e628fe35a63608a0ea8e7cf08"
+  integrity sha512-E1dU4fzC9wN2QK2Cr1MLCfyHM8BoNnRFvuf45LYMPNDA+WqbNzC45S4UzPxvp1fFJ1rvSGU0bPvdd35VLmXG8g==
+
 "@types/sonic-boom@*":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@types/sonic-boom/-/sonic-boom-0.7.0.tgz#38337036293992a1df65dd3161abddf8fb9b7176"
@@ -4793,6 +4798,11 @@ onetime@^5.1.0:
   integrity sha512-5NcSkPHhwTVFIQN+TUqXoS5+dlElHXdpAWu9I0HP20YOtIi+aZ0Ct82jdlILDxjLEAWwvm+qj1m6aEtsDVmm6Q==
   dependencies:
     mimic-fn "^2.1.0"
+
+openapi-types@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-9.3.0.tgz#2d90549edb928cf06cf83018485a1a5961fbd2b9"
+  integrity sha512-sR23YjmuwDSMsQVZDHbV9mPgi0RyniQlqR0AQxTC2/F3cpSjRFMH3CFPjoWvNqhC4OxPkDYNb2l8Mc1Me6D/KQ==
 
 opencollective-postinstall@^2.0.2:
   version "2.0.3"
