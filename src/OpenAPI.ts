@@ -149,4 +149,27 @@ export class OpenAPI {
       },
     };
   }
+
+  responses<T extends Required<Pick<RouteValidations, 'RESPONSE_BODY'>>>(
+    validations: T,
+    descriptions: Record<keyof T['RESPONSE_BODY'], string>
+  ): OpenAPIV3.ResponsesObject {
+    const responseBodies = validations.RESPONSE_BODY;
+    const result: OpenAPIV3.ResponsesObject = {};
+
+    Object.entries(responseBodies).forEach(([_status, schema]) => {
+      const status = (_status as unknown) as keyof typeof responseBodies;
+
+      result[status] = {
+        description: descriptions[status],
+        content: {
+          'application/json': {
+            schema: schema as any,
+          },
+        },
+      };
+    });
+
+    return result;
+  }
 }
