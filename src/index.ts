@@ -1,4 +1,5 @@
 export * from './clients';
+export * from './env';
 export { default as ExceptionHandler } from './exceptionHandler';
 export { default as FixtureGenerator } from './fixtureGenerator';
 export * from './middlewares';

@@ -10,17 +10,17 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
     throw new VError('Auth Key Required', VError.HTTP_STATUS.UNAUTHORIZED);
   }
 
-  static setHeaders(res: Response, rateLimiterRes: RateLimiterRes, maxPoints: number) {
+  static setHeaders(res: Response, rateLimiterRes: RateLimiterRes, maxPoints: number): void {
     res.setHeader('X-RateLimit-Limit', maxPoints);
     res.setHeader('X-RateLimit-Remaining', rateLimiterRes.remainingPoints);
     res.setHeader('X-RateLimit-Reset', new Date(Date.now() + rateLimiterRes.msBeforeNext).toISOString());
   }
 
-  static isUnauthorizedRequest(req: Request) {
+  static isUnauthorizedRequest(req: Request): boolean {
     return !req.headers.authorization;
   }
 
-  async consume(res: Response, next: NextFunction, { resource, isPublic }: { resource: string; isPublic?: boolean }) {
+  async consume(res: Response, next: NextFunction, { resource, isPublic }: { resource: string; isPublic?: boolean }): Promise<void> {
     const maxPoints = isPublic ? this.config.RATE_LIMITER_POINTS_PUBLIC : this.config.RATE_LIMITER_POINTS_PRIVATE;
     const rateLimiterClient = this.services.rateLimitClient[isPublic ? 'public' : 'private'];
 
@@ -39,7 +39,7 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
     return next();
   }
 
-  async versionConsume(req: Request, res: Response, next: NextFunction) {
+  async versionConsume(req: Request, res: Response, next: NextFunction): Promise<void> {
     const isPublic = RateLimitMiddleware.isUnauthorizedRequest(req);
 
     return this.consume(res, next, {
