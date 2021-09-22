@@ -4,6 +4,7 @@ import Ajv from 'ajv/dist/2019';
 import type { AxiosError } from 'axios';
 import Promise from 'bluebird';
 import { NextFunction, Request, Response } from 'express';
+import * as ExpressValidator from 'express-validator';
 import { HttpStatus } from 'http-status';
 import { DateTime } from 'luxon';
 import { OpenAPI } from './OpenAPI';
@@ -179,6 +180,18 @@ class ResponseBuilder {
     return response;
   }
 
+  /** @deprecated You should migrate to the new JSON schema & OpenAPI validation system.  */
+  legacyValidation = (req: Request, __: Response, next: NextFunction): void => {
+    const errors = ExpressValidator.validationResult(req).array({ onlyFirstError: true });
+
+    if (errors.length) {
+      const errorMap = errors.reduce((errs, err) => Object.assign(errs, { [err.param]: { message: err.msg } }), {});
+      throw new VError('validation', VError.HTTP_STATUS.BAD_REQUEST, { errors: errorMap });
+    }
+
+    return next();
+  };
+
   validation = (validations: RouteValidations) => (req: Request, __: Response, next: NextFunction): void => {
     Object.entries(validations).forEach(([_kind, schema]) => {
       const kind = _kind as keyof typeof validations;
@@ -236,14 +249,33 @@ class ResponseBuilder {
   // TODO: split this into multiple functions, it has a very confusing pattern right now
   // eslint-disable-next-line sonarjs/cognitive-complexity
   route(dataPromise: RawRoute, successCodeOverride?: HttpStatus, failureCodeOverride?: HttpStatus): Route {
-    if (dataPromise.validations && !dataPromise.validationsApplied) {
-      dataPromise.validationsApplied = true;
-      const expressMiddlewares: Array<(...params: any[]) => any> = [
-        this.route(this.validation(dataPromise.validations) as any),
-        this.route(dataPromise),
-      ];
+    if (!dataPromise.validationsApplied) {
+      if (dataPromise.validations) {
+        // New validation system
 
-      return expressMiddlewares as any;
+        dataPromise.validationsApplied = true;
+
+        const expressMiddlewares: Array<(...params: any[]) => any> = [
+          this.route(this.validation(dataPromise.validations) as any),
+          this.route(dataPromise),
+        ];
+
+        return expressMiddlewares as any;
+      }
+
+      if (dataPromise.expressValidatorValidations) {
+        // Legacy validation system
+
+        dataPromise.validationsApplied = true;
+
+        const expressMiddlewares: { validations?: any } & any[] = [
+          ...(this.route(Object.values(dataPromise.expressValidatorValidations) as any) as any),
+          this.route(this.legacyValidation as any),
+          this.route(dataPromise),
+        ];
+
+        expressMiddlewares.validations = dataPromise.expressValidatorValidations;
+      }
     }
 
     if (dataPromise.callback) {

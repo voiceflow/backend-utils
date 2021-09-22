@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types, max-classes-per-file */
 import { NextFunction, Request, Response } from 'express';
+import { ValidationChain } from 'express-validator';
 
 import { RouteValidations } from './schema';
 
@@ -13,9 +14,19 @@ export interface Route {
 export type RawRoute = AsyncMiddleware & {
   callback?: boolean;
   route?: boolean;
-  validations?: RouteValidations;
   validationsApplied?: boolean;
-};
+} & (
+    | {
+        validations?: RouteValidations;
+        /** @deprecated You should migrate to the new JSON schema & OpenAPI validation system.  */
+        expressValidatorValidations: undefined;
+      }
+    | {
+        validations: undefined;
+        /** @deprecated You should migrate to the new JSON schema & OpenAPI validation system.  */
+        expressValidatorValidations?: Record<string, ValidationChain>;
+      }
+  );
 
 export interface ErrorResponse<T> {
   data: T | { code: number; status: string; dateTime: string; timestamp: number };
