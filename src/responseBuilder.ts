@@ -275,6 +275,8 @@ class ResponseBuilder {
         ];
 
         expressMiddlewares.validations = dataPromise.expressValidatorValidations;
+
+        return expressMiddlewares as any;
       }
     }
 
