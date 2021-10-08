@@ -823,14 +823,14 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@voiceflow/commitlint-config@^1.0.2":
+"@voiceflow/commitlint-config@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@voiceflow/commitlint-config/-/commitlint-config-1.0.2.tgz#c64b2b4b2375c2c8d44e605439849256a37e419c"
   integrity sha512-kbx6eDBG4eRLGlK28axL1zHHhMT0t08KlDW0389oBCI/q558opsBRIPs8hYGugfFqT/slAKqMP3Kevj928VtyA==
   dependencies:
     "@commitlint/config-conventional" "^11.0.0"
 
-"@voiceflow/eslint-config@^3.1.0":
+"@voiceflow/eslint-config@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@voiceflow/eslint-config/-/eslint-config-3.1.0.tgz#4e89624c43024e677b10d2f2246c9ddc56f11ae7"
   integrity sha512-NKBi3kZHzhrNqg0xve5R5m/pCC3FvZnfMENHq4gVntfBeyJL3LfJsqzpXTcYi/anlUlcFrHB8ahu0BrPdm42aA==
@@ -861,17 +861,17 @@
     eslint-plugin-xss "^0.1.9"
     eslint-plugin-you-dont-need-lodash-underscore "^6.11.0"
 
-"@voiceflow/git-branch-check@^1.2.0":
+"@voiceflow/git-branch-check@1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@voiceflow/git-branch-check/-/git-branch-check-1.2.0.tgz#773e07c5e4558283b8f94a0e7e05b88e637bc3d0"
   integrity sha512-t+c50h+brJHwXbPDNoOT9Q2WYKWGd7usHNsp0B8qI0IBJLdH/CKTAsV+4gxO2IS8jMXVNxcyE2r25tHO3zRsFQ==
   dependencies:
     current-git-branch "^1.1.0"
 
-"@voiceflow/logger@1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@voiceflow/logger/-/logger-1.5.2.tgz#da55a612f5ffaf17ec976f713b202b2f68a78bec"
-  integrity sha512-zp+yArdfUBrGSFf6Sw4T8q9apB3KWLNjt5tjGFimSna2lNJL0JV40hJAaPmb6YL4FVOzj8N0+ZL15uO7mUZGEA==
+"@voiceflow/logger@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@voiceflow/logger/-/logger-1.6.0.tgz#83a2fe021513834b0b74bbb42b7698656fae9367"
+  integrity sha512-m8aQI6LvhlCOkP2kQ0BZDgrwLjXl00UEhtcB04f90OI6lNM+HvP7vFEErDjnhTJDTYiYhhHQD5cT/zgS7ffS3A==
   dependencies:
     "@types/cls-hooked" "^4.3.1"
     "@types/express-pino-logger" "^4.0.2"
@@ -912,12 +912,12 @@
     quick-format-unescaped "^4.0.1"
     sonic-boom "^1.0.2"
 
-"@voiceflow/prettier-config@^1.0.5":
+"@voiceflow/prettier-config@1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@voiceflow/prettier-config/-/prettier-config-1.0.5.tgz#307caf65040ae0c0539ecb8531b9e403381f11ab"
   integrity sha512-yM35E7UI0fD8yMgL7JImljvMLZVU+jCz/latc2s2e7Nlbr9kiMpO0FArjkaXVIghhcUeQ0y04lsFUHRu3kMzmA==
 
-"@voiceflow/tsconfig@^1.0.0":
+"@voiceflow/tsconfig@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@voiceflow/tsconfig/-/tsconfig-1.0.0.tgz#09406c649729c8a9d5b7fa1d76427d8a9adbc961"
   integrity sha512-+gOf2u/5xc5SHqrD+o1nBPfodAo34jQWmVR6K/h94/XZp8uoHQ7yzUnMqRpiJMrdX+Ku7WCI0xd9h1jYSHS0LA==
