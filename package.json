@@ -48,7 +48,7 @@
     "commitizen": "^4.2.3",
     "cz-conventional-changelog": "^3.3.0",
     "depcheck": "^1.4.0",
-    "eslint": "^7.25.0",
+    "eslint": "^7.32.0",
     "eslint-output": "^3.0.1",
     "express-validator": "^6.10.1",
     "fixpack": "^4.0.0",

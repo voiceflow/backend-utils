@@ -128,6 +128,7 @@ class ResponseBuilder {
 
     if (response.code >= 500) {
       log.error(
+        // eslint-disable-next-line sonarjs/no-nested-template-literals
         `500+ error: ${req?.originalUrl} ${req?.user ? ` User ID: ${req?.user.id}` : ''} ${error.stack} ${
           error.data ? JSON.stringify(error.data) : ''
         }`
