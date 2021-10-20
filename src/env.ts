@@ -1,3 +1,4 @@
+import { Environment } from '@voiceflow/common';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
@@ -50,3 +51,21 @@ export const setupEnv = (rootDir = process.cwd()): void => {
   }
 };
 /* eslint-enable no-console */
+
+/** @throws if `process.env[key]` is not a valid {@link Environment}. */
+export const getNodeEnv = (envVar = 'NODE_ENV'): Environment => {
+  const raw = getRequiredProcessEnv(envVar);
+
+  switch (raw) {
+    case Environment.E2E:
+      return Environment.E2E;
+    case Environment.LOCAL:
+      return Environment.LOCAL;
+    case Environment.PRODUCTION:
+      return Environment.PRODUCTION;
+    case Environment.TEST:
+      return Environment.TEST;
+    default:
+      throw new RangeError(`Invalid ${envVar} value: ${raw}`);
+  }
+};

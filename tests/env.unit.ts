@@ -1,6 +1,7 @@
+import { Environment } from '@voiceflow/common';
 import { expect } from 'chai';
 
-import { getOptionalProcessEnv, getRequiredProcessEnv } from '../src';
+import { getNodeEnv, getOptionalProcessEnv, getRequiredProcessEnv } from '../src';
 
 const TEST_ENV_VAR = 'TEST_ENV_VAR';
 
@@ -49,5 +50,25 @@ describe('getOptionalProcessEnv', () => {
 
     process.env[TEST_ENV_VAR] = 'hello';
     expect(getOptionalProcessEnv(TEST_ENV_VAR)).to.eql('hello');
+  });
+});
+
+describe('getNodeEnv', () => {
+  beforeEach(() => {
+    delete process.env[TEST_ENV_VAR];
+  });
+
+  it('gets the environment variable', () => {
+    process.env[TEST_ENV_VAR] = Environment.PRODUCTION;
+    expect(getNodeEnv(TEST_ENV_VAR)).to.eql(Environment.PRODUCTION);
+  });
+
+  it('throws if environment variable is missing', () => {
+    expect(() => getNodeEnv(TEST_ENV_VAR)).to.throw(`env var: ${TEST_ENV_VAR} not found`);
+  });
+
+  it('throws if environment variable is invalid', () => {
+    process.env[TEST_ENV_VAR] = 'not a real env';
+    expect(() => getNodeEnv(TEST_ENV_VAR)).to.throw(`Invalid ${TEST_ENV_VAR} value: not a real env`);
   });
 });
