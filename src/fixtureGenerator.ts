@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign,@typescript-eslint/no-empty-function, no-underscore-dangle */
+/* eslint-disable no-param-reassign,@typescript-eslint/no-empty-function */
 import { expect } from 'chai';
 import { Request, Response } from 'express';
 import _ from 'lodash';

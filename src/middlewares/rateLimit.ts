@@ -4,7 +4,6 @@ import { RateLimiterRes } from 'rate-limiter-flexible';
 
 import { AbstractMiddleware, RateLimitConfig } from '../types';
 
-// eslint-disable-next-line import/prefer-default-export
 export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLimitConfig> extends AbstractMiddleware<S, C> {
   static throwAuthError(): never {
     throw new VError('Auth Key Required', VError.HTTP_STATUS.UNAUTHORIZED);
