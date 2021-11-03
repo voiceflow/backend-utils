@@ -52,8 +52,8 @@ export const setupEnv = (rootDir = process.cwd()): void => {
 };
 /* eslint-enable no-console */
 
-const environments: ReadonlySet<unknown> = new Set(Object.values(Environment));
-const environmentIsValid = (env: unknown): env is Environment => environments.has(env);
+const validEnvironments: ReadonlySet<unknown> = new Set(Object.values(Environment));
+const environmentIsValid = (env: unknown): env is Environment => validEnvironments.has(env);
 
 /** @throws if `process.env[key]` is not a valid {@link Environment}. */
 export const getNodeEnv = (envVar = 'NODE_ENV'): Environment => {
@@ -63,5 +63,5 @@ export const getNodeEnv = (envVar = 'NODE_ENV'): Environment => {
     return raw;
   }
 
-  throw new RangeError(`Invalid ${envVar} value: ${raw} - expected one of ${[...environments].join(', ')}`);
+  throw new RangeError(`Invalid ${envVar} value: ${raw} - expected one of: ${[...validEnvironments].join(', ')}`);
 };
