@@ -57,6 +57,8 @@ export const getNodeEnv = (envVar = 'NODE_ENV'): Environment => {
   const raw = getRequiredProcessEnv(envVar);
 
   switch (raw) {
+    case Environment.DEVELOPMENT:
+      return Environment.DEVELOPMENT;
     case Environment.E2E:
       return Environment.E2E;
     case Environment.LOCAL:

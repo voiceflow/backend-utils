@@ -19,7 +19,7 @@
     "@types/lodash": "^4.14.168",
     "@types/luxon": "^1.26.4",
     "@types/sinon": "^10.0.0",
-    "@voiceflow/common": "7.2.0",
+    "@voiceflow/common": "7.3.0",
     "@voiceflow/logger": "1.6.0",
     "@voiceflow/verror": "^1.1.0",
     "bluebird": "^3.7.2",
