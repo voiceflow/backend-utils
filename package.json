@@ -39,6 +39,7 @@
     "@types/mocha": "^8.2.2",
     "@types/supertest": "^2.0.11",
     "@voiceflow/commitlint-config": "1.1.0",
+    "@voiceflow/common": "7.6.3",
     "@voiceflow/eslint-config": "5.1.0",
     "@voiceflow/git-branch-check": "1.2.0",
     "@voiceflow/prettier-config": "1.0.5",
