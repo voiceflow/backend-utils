@@ -81,6 +81,9 @@
     "type": "git",
     "url": "git+https://github.com/voiceflow/backend-utils.git"
   },
+  "resolutions": {
+    "strip-ansi": "6.0.1"
+  },
   "scripts": {
     "build": "yarn clean && ttsc --project ./tsconfig.build.json",
     "clean": "rimraf build",
