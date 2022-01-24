@@ -1168,10 +1168,10 @@
   dependencies:
     "@commitlint/config-conventional" "16.0.0"
 
-"@voiceflow/common@7.15.2":
-  version "7.15.2"
-  resolved "https://registry.yarnpkg.com/@voiceflow/common/-/common-7.15.2.tgz#2920f196a3f80275d86fbb04c5ed33ffbf09ba80"
-  integrity sha512-5EjFh38V0/qVaPXIZ5kUyI9kcP+x6s3IJT/xqYI0kiTPC+ATuW40EWu+3+LywcofY1eVPCQIS7y3CflYsPjGoA==
+"@voiceflow/common@7.15.3":
+  version "7.15.3"
+  resolved "https://registry.yarnpkg.com/@voiceflow/common/-/common-7.15.3.tgz#3219427c12695b058377abb785a59fa030bb7dc8"
+  integrity sha512-m4WEcBVdjBZuYRSQMFG+AbsXny/b9qbup+IrAmCJjlpF0txIJ4MWREReHlnaHqbNQmDYTU/Tddg31uIkY0moqg==
   dependencies:
     "@types/crypto-js" "^4.0.2"
     bson-objectid "^2.0.1"
@@ -1183,10 +1183,10 @@
     number-to-words "^1.2.4"
     typescript-fsa "3.0.0"
 
-"@voiceflow/eslint-config@5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@voiceflow/eslint-config/-/eslint-config-5.1.0.tgz#1193fe8c48dc294a9911630529dd5d212cefc2f9"
-  integrity sha512-hPzoYqCyL6lV6LL+r9hSmWZ+mqGb41JvSxKigR+SVVXz2N9LgNxQBaGgy/ZbKjR0wB4R6QxIFRJZfZXWNd/CCg==
+"@voiceflow/eslint-config@5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@voiceflow/eslint-config/-/eslint-config-5.1.2.tgz#21ad9d88eb2e5ce5fd219c0c64da795294ca5315"
+  integrity sha512-lyGKhnOjnN51K3v/o0oOaa/dLqMVpTZmQrVIsQekJTFvuKh1AkW5DkjxX1itCyzDSo/3wSPLPUtbG1JeZr0xlw==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.3.0"
     "@typescript-eslint/parser" "^5.3.0"
@@ -1220,10 +1220,10 @@
   dependencies:
     current-git-branch "^1.1.0"
 
-"@voiceflow/logger@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@voiceflow/logger/-/logger-1.6.0.tgz#83a2fe021513834b0b74bbb42b7698656fae9367"
-  integrity sha512-m8aQI6LvhlCOkP2kQ0BZDgrwLjXl00UEhtcB04f90OI6lNM+HvP7vFEErDjnhTJDTYiYhhHQD5cT/zgS7ffS3A==
+"@voiceflow/logger@1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@voiceflow/logger/-/logger-1.6.1.tgz#fd07b460c1b99c9deb2682fb2698c2cd49cce02f"
+  integrity sha512-h28hWWSTd62UIAE9RbYFsnB7D5xVyR4lFKfFkFNzx9TwuDF0kQRmrPDuksTwCni+yNZbCF1wIFo2B9ppJzA76A==
   dependencies:
     "@types/cls-hooked" "^4.3.1"
     "@types/express-pino-logger" "^4.0.2"
@@ -1264,10 +1264,10 @@
     quick-format-unescaped "^4.0.1"
     sonic-boom "^1.0.2"
 
-"@voiceflow/prettier-config@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@voiceflow/prettier-config/-/prettier-config-1.0.5.tgz#307caf65040ae0c0539ecb8531b9e403381f11ab"
-  integrity sha512-yM35E7UI0fD8yMgL7JImljvMLZVU+jCz/latc2s2e7Nlbr9kiMpO0FArjkaXVIghhcUeQ0y04lsFUHRu3kMzmA==
+"@voiceflow/prettier-config@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@voiceflow/prettier-config/-/prettier-config-1.0.6.tgz#c06ba240703eaed4516bc8719a23604a37ff6d83"
+  integrity sha512-Q1VChvhTYGw/jtg2YBrFwd9wjqogvQaSppTrqNaOvmq9tgqLOPgZC20zBAwbM5JX6UPC6bKXN0qit0LLddC/kw==
 
 "@voiceflow/tsconfig@1.2.5":
   version "1.2.5"
