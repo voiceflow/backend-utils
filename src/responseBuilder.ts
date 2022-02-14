@@ -1,6 +1,5 @@
 import VError from '@voiceflow/verror';
 import type { AxiosError } from 'axios';
-import Promise from 'bluebird';
 import { NextFunction, Request, Response } from 'express';
 import * as ExpressValidator from 'express-validator';
 import { HttpStatus } from 'http-status';
@@ -196,27 +195,27 @@ class ResponseBuilder {
         nextCalled = () => next(route);
       };
 
-      await Promise.try(() => (typeof dataPromise === 'function' ? (dataPromise as any)(req, res, nextCheck) : dataPromise))
-        .then((data) => {
-          if (data instanceof Error) {
-            return ResponseBuilder.errorResponse(data, failureCodeOverride, req);
-          }
+      let output: ErrorResponse<unknown> | ReturnType<typeof ResponseBuilder['okResponse']>;
 
-          return ResponseBuilder.okResponse(data, successCodeOverride);
-        })
-        .catch((err) => ResponseBuilder.errorResponse(err, failureCodeOverride, req))
-        .then((output) => {
-          if (res.headersSent) {
-            return;
-          }
+      try {
+        const data = await (typeof dataPromise === 'function' ? (dataPromise as any)(req, res, nextCheck) : dataPromise);
 
-          // eslint-disable-next-line promise/always-return
-          if (nextCalled) {
-            nextCalled();
-            return;
-          }
+        output =
+          data instanceof Error
+            ? ResponseBuilder.errorResponse(data, failureCodeOverride, req)
+            : ResponseBuilder.okResponse(data, successCodeOverride);
+      } catch (err) {
+        output = ResponseBuilder.errorResponse(err, failureCodeOverride, req);
+      }
+
+      if (!res.headersSent) {
+        if (nextCalled) {
+          // TypeScript doesn't know that calling nextCheck will define nextCalled as a function
+          (nextCalled as () => void)();
+        } else {
           res.status(output.code as number).json(output.data);
-        });
+        }
+      }
     }) as any;
   }
   /* eslint-enable no-param-reassign */
