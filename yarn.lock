@@ -1163,10 +1163,10 @@
   dependencies:
     "@commitlint/config-conventional" "16.0.0"
 
-"@voiceflow/common@7.15.3":
-  version "7.15.3"
-  resolved "https://registry.yarnpkg.com/@voiceflow/common/-/common-7.15.3.tgz#3219427c12695b058377abb785a59fa030bb7dc8"
-  integrity sha512-m4WEcBVdjBZuYRSQMFG+AbsXny/b9qbup+IrAmCJjlpF0txIJ4MWREReHlnaHqbNQmDYTU/Tddg31uIkY0moqg==
+"@voiceflow/common@7.22.0":
+  version "7.22.0"
+  resolved "https://registry.yarnpkg.com/@voiceflow/common/-/common-7.22.0.tgz#9de2a9a6f8c778e5d54206224a88f900cdfb6d89"
+  integrity sha512-mKeNfclIGclXAWz5Td0BEHR7jhm9dUZfrqoukXekBZRrDzXYai1D4F3AxXhX2DEqIE1lPXCr8SATQSE65NxpEg==
   dependencies:
     "@types/crypto-js" "^4.0.2"
     bson-objectid "^2.0.1"
