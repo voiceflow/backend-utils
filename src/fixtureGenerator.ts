@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign,@typescript-eslint/no-empty-function */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from 'chai';
 import { Request, Response } from 'express';
 import _ from 'lodash';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import sinon from 'sinon';
 
 import { ServiceManager } from './types';
