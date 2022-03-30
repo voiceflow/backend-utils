@@ -25,6 +25,8 @@ export interface ZipReaderConfig {
   /**
    * If the zip file contains zip files, they will be extracted up to this many deep.
    * If the depth exceeds this number, then these deeper zip files will be returned instead of extracted.
+   *
+   * `0` means do not recurse.
    */
   maxZipRecursionDepth: number;
 }
