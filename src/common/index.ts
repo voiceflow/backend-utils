@@ -1,1 +1,1 @@
-export * as zip from './zip';
+export * from './zip';

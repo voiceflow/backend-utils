@@ -1,5 +1,5 @@
 export * from './clients';
-export * as common from './common';
+export * as Common from './common';
 export * from './env';
 export { default as FixtureGenerator } from './fixtureGenerator';
 export * from './middlewares';
