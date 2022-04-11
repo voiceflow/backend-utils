@@ -22,6 +22,7 @@
     "jszip": "3.7.1",
     "lodash": "^4.17.11",
     "luxon": "^1.21.3",
+    "minimatch": "5.0.1",
     "rate-limiter-flexible": "^2.2.2",
     "sinon": "^10.0.0"
   },
