@@ -1,3 +1,4 @@
+import { AnyRecord } from '@voiceflow/common';
 import JSZip from 'jszip';
 import minimatch from 'minimatch';
 
@@ -35,6 +36,8 @@ export interface ZipReaderConfig {
 export interface ZipEntry {
   name: string;
   content: Uint8Array;
+  toString: (decoder?: TextDecoder) => string;
+  toJSON: <T = AnyRecord>(decoder?: TextDecoder) => T;
 }
 
 export interface ZipGetFilesOptions {
@@ -91,6 +94,8 @@ export class ZipReader {
         yield {
           name: obj.name,
           content,
+          toString: (decoder = new TextDecoder()) => decoder.decode(content),
+          toJSON: <T = AnyRecord>(decoder = new TextDecoder()) => JSON.parse(decoder.decode(content)) as T,
         };
       }
     }
