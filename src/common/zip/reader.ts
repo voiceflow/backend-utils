@@ -1,4 +1,6 @@
+import { AnyRecord } from '@voiceflow/common';
 import JSZip from 'jszip';
+import minimatch from 'minimatch';
 
 import { isZipFile } from './guard';
 
@@ -34,6 +36,12 @@ export interface ZipReaderConfig {
 export interface ZipEntry {
   name: string;
   content: Uint8Array;
+  toString: (decoder?: TextDecoder) => string;
+  toJSON: <T = AnyRecord>(decoder?: TextDecoder) => T;
+}
+
+export interface ZipGetFilesOptions {
+  path: string;
 }
 
 export class ZipReader {
@@ -48,12 +56,15 @@ export class ZipReader {
     };
   }
 
-  public async *getFiles(): AsyncGenerator<ZipEntry> {
-    yield* this.getFilesRecursively(this.zip, this.config.maxZipRecursionDepth);
+  public async *getFiles(options?: Partial<ZipGetFilesOptions>): AsyncGenerator<ZipEntry> {
+    yield* this.getFilesRecursively(this.zip, {
+      path: '**/*',
+      ...(options ?? {}),
+    });
   }
 
-  private async *getFilesRecursively(zip: JSZip, maxDepth: number, currentDepth = 0): AsyncGenerator<ZipEntry> {
-    const objects = zip.filter(() => true);
+  private async *getFilesRecursively(zip: JSZip, config: ZipGetFilesOptions, currentDepth = 0): AsyncGenerator<ZipEntry> {
+    const objects = zip.filter((_, file) => minimatch(file.name, config.path));
 
     let fileCount = 0;
     let totalSize = 0;
@@ -75,14 +86,16 @@ export class ZipReader {
         throw new Error(`Total file size exceeded maximum (${this.config.maxUnzipSizeBytes} bytes)`);
       }
 
-      if (currentDepth < maxDepth && isZipFile(content)) {
+      if (currentDepth < this.config.maxZipRecursionDepth && isZipFile(content)) {
         // eslint-disable-next-line no-await-in-loop
         const zip = await JSZip.loadAsync(content);
-        yield* this.getFilesRecursively(zip, maxDepth, currentDepth + 1);
+        yield* this.getFilesRecursively(zip, config, currentDepth + 1);
       } else {
         yield {
           name: obj.name,
           content,
+          toString: (decoder = new TextDecoder()) => decoder.decode(content),
+          toJSON: <T = AnyRecord>(decoder = new TextDecoder()) => JSON.parse(decoder.decode(content)) as T,
         };
       }
     }
