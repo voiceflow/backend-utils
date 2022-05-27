@@ -2,7 +2,7 @@
   "extends": "@voiceflow/tsconfig",
   "compilerOptions": {
     "baseUrl": "./src",
-    "lib": ["DOM", "ES2020"]
+    "lib": ["ES2020"]
   },
   "compileOnSave": false,
   "include": [

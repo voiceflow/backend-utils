@@ -1,6 +1,7 @@
 import { AnyRecord } from '@voiceflow/common';
 import JSZip from 'jszip';
 import minimatch from 'minimatch';
+import { TextDecoder } from 'util';
 
 import { isZipFile } from './guard';
 
