@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import JSZip from 'jszip';
+import { TextDecoder } from 'util';
 
 import { ZipReader } from '../../../src/common/zip';
 
