@@ -31,7 +31,7 @@ describe('responseBuilder unit tests', () => {
   it('returns ok response with different code', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve) => resolve({ foo: 'bar' }));
+    const dataPromise = Promise.resolve({ foo: 'bar' });
 
     await responseBuilder.route(dataPromise, VError.HTTP_STATUS.NO_CONTENT)({ originalUrl: '/test' }, res);
 
@@ -89,7 +89,7 @@ describe('responseBuilder unit tests', () => {
   it('returns bad response with overridden code', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve, reject) => reject(new VError('boom')));
+    const dataPromise = Promise.reject(new VError('boom'));
 
     await responseBuilder.route(dataPromise, undefined, VError.HTTP_STATUS.BAD_REQUEST)({ originalUrl: '/test' }, res);
 
@@ -130,7 +130,7 @@ describe('responseBuilder unit tests', () => {
   it('returns bad response with Error', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve, reject) => reject(new Error('boom')));
+    const dataPromise = Promise.reject(new VError('boom'));
 
     await responseBuilder.route(dataPromise)({ originalUrl: '/test' }, res);
 
@@ -153,7 +153,7 @@ describe('responseBuilder unit tests', () => {
   it('returns bad response with code 503', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve, reject) => reject(new VError('boom', HttpStatus.SERVICE_UNAVAILABLE)));
+    const dataPromise = Promise.reject(new VError('boom', HttpStatus.SERVICE_UNAVAILABLE));
 
     await responseBuilder.route(dataPromise)({ originalUrl: '/test' }, res);
 
@@ -176,7 +176,7 @@ describe('responseBuilder unit tests', () => {
   it('returns bad response with data', async () => {
     const responseBuilder = new ResponseBuilder();
     const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve, reject) => reject(new VError('boom', undefined, { foo: 'bar' })));
+    const dataPromise = Promise.reject(new VError('boom', undefined, { foo: 'bar' }));
 
     await responseBuilder.route(dataPromise)({ originalUrl: '/test' }, res);
 
@@ -188,28 +188,5 @@ describe('responseBuilder unit tests', () => {
     expect(res.status.args[0][0]).to.eql(expected.code);
 
     expect(res.status().json.args[0][0]).to.eql({ foo: 'bar' });
-  });
-
-  it('returns bad response with data from message', async () => {
-    const responseBuilder = new ResponseBuilder();
-    const res = { status: sinon.stub().returns({ json: sinon.stub() }) };
-    const dataPromise = new Promise((resolve, reject) => reject(new VError('boom')));
-
-    await responseBuilder.route(dataPromise)({ originalUrl: '/test' }, res);
-
-    const expected = {
-      code: 500,
-      status: 'Internal Server Error',
-      data: 'boom',
-    };
-
-    expect(res.status.args[0][0]).to.eql(expected.code);
-
-    expect(res.status().json.args[0][0].code).to.eql(expected.code);
-    expect(res.status().json.args[0][0].data).to.eql(expected.data);
-    expect(res.status().json.args[0][0].status).to.eql(expected.status);
-
-    expect(res.status().json.args[0][0].dateTime).to.not.be.undefined;
-    expect(res.status().json.args[0][0].timestamp).to.not.be.undefined;
   });
 });
