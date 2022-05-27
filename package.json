@@ -41,7 +41,7 @@
     "@types/sinon": "^10.0.0",
     "@types/supertest": "^2.0.11",
     "@voiceflow/commitlint-config": "2.0.0",
-    "@voiceflow/common": "7.26.1",
+    "@voiceflow/common": "7.27.0",
     "@voiceflow/eslint-config": "5.1.2",
     "@voiceflow/git-branch-check": "1.2.3",
     "@voiceflow/prettier-config": "1.0.7",
