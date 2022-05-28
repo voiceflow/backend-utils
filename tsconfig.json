@@ -2,7 +2,8 @@
   "extends": "@voiceflow/tsconfig",
   "compilerOptions": {
     "baseUrl": "./src",
-    "lib": ["ES2020"]
+    "target": "ES2021",
+    "lib": ["ES2021"]
   },
   "compileOnSave": false,
   "include": [
