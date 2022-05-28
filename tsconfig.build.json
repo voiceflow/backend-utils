@@ -4,9 +4,8 @@
     "outDir": "./build",
     "declaration": true,
     "plugins": [
-      {
-        "transform": "typescript-transform-paths"
-      }
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
   "exclude": [
