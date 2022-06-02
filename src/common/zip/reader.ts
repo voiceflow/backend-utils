@@ -64,7 +64,11 @@ export class ZipReader {
     });
   }
 
-  private async *getFilesRecursively(zip: JSZip, config: ZipGetFilesOptions, currentDepth = 0): AsyncGenerator<ZipEntry> {
+  private async *getFilesRecursively(
+    zip: JSZip,
+    config: ZipGetFilesOptions,
+    currentDepth = 0
+  ): AsyncGenerator<ZipEntry> {
     const objects = zip.filter((_, file) => minimatch(file.name, config.path));
 
     let fileCount = 0;

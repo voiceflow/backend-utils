@@ -27,12 +27,16 @@ const createFixture = <T extends ServiceManager<any, any>>(serviceManager: T): T
     middlewares: _.mapValues(middlewares, (service) =>
       _.mapValues(service, (method) => {
         if (method.callback) {
-          const callbackStub: sinon.SinonStubStatic & { callback?: boolean } = sinon.stub().returns(sinon.stub().callsArg(2));
+          const callbackStub: sinon.SinonStubStatic & { callback?: boolean } = sinon
+            .stub()
+            .returns(sinon.stub().callsArg(2));
           callbackStub.callback = true;
           return callbackStub;
         }
 
-        const methodStub: sinon.SinonStubStatic & { validations?: Record<string, sinon.SinonStubStatic> } = sinon.stub().callsArg(2);
+        const methodStub: sinon.SinonStubStatic & {
+          validations?: Record<string, sinon.SinonStubStatic>;
+        } = sinon.stub().callsArg(2);
         methodStub.validations = _.mapValues(method.validations, () => sinon.stub().callsArg(2));
 
         return [...Object.values(methodStub.validations), methodStub];
@@ -56,7 +60,10 @@ const createFixture = <T extends ServiceManager<any, any>>(serviceManager: T): T
   } as unknown) as T;
 };
 
-const checkFixture = <T extends ServiceManager<any, any>>(fixture: T, expected: FixtureExpect<T['controllers'], T['middlewares']>): void => {
+const checkFixture = <T extends ServiceManager<any, any>>(
+  fixture: T,
+  expected: FixtureExpect<T['controllers'], T['middlewares']>
+): void => {
   const { middlewares, controllers } = fixture;
 
   const validations = {
@@ -78,7 +85,10 @@ const checkFixture = <T extends ServiceManager<any, any>>(fixture: T, expected: 
           validations.controllers[controller] = {};
         }
 
-        validations.controllers[controller][method] = _.mapValues(controllerMethod.validations, (stub) => stub.callCount);
+        validations.controllers[controller][method] = _.mapValues(
+          controllerMethod.validations,
+          (stub) => stub.callCount
+        );
       }
 
       controllers[controller][method] = controllerMethod.callCount;
@@ -97,7 +107,9 @@ const checkFixture = <T extends ServiceManager<any, any>>(fixture: T, expected: 
     Object.keys(middlewares[service]).forEach((method) => {
       const expressMiddlewares = middlewares[service][method];
       // if no length -> callback middleware -> it's not an array
-      const middlewareMethod = expressMiddlewares.length ? expressMiddlewares[expressMiddlewares.length - 1] : expressMiddlewares;
+      const middlewareMethod = expressMiddlewares.length
+        ? expressMiddlewares[expressMiddlewares.length - 1]
+        : expressMiddlewares;
 
       if (middlewareMethod.validations) {
         if (!validations.middlewares[service]) {
