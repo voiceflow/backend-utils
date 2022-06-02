@@ -84,7 +84,6 @@
     "ioredis": "^4.28.5",
     "jszip": "^3.7.1"
   },
-  "prettier": "@voiceflow/prettier-config",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/voiceflow/backend-utils.git"
