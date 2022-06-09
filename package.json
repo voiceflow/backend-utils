@@ -16,6 +16,7 @@
     "@voiceflow/verror": "^1.1.0",
     "chai": "^4.3.4",
     "dotenv": "^10.0.0",
+    "gaxios": "^4.3.2",
     "http-errors": "^2.0.0",
     "http-status": "^1.4.2",
     "jszip": "3.7.1",
