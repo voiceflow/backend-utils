@@ -1,8 +1,6 @@
-import { HttpError, isHttpError } from 'http-errors';
+import { HttpError } from 'http-errors';
 
 import type { ExceptionFormatter } from '../types';
-
-export { isHttpError };
 
 export const formatHttpError: ExceptionFormatter<HttpError> = (err) => {
   return {

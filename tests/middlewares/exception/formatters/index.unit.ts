@@ -1,5 +1,6 @@
 import VError from '@voiceflow/verror';
 import { expect } from 'chai';
+import { GaxiosError, GaxiosOptions, GaxiosResponse } from 'gaxios';
 import { BadGateway } from 'http-errors';
 
 import { formatError } from '../../../../src/middlewares/exception/formatters';
@@ -11,6 +12,31 @@ describe('ExceptionMiddleware', () => {
         statusCode: 400,
         message: 'Some error',
         name: 'verror',
+      });
+    });
+
+    it('formats GaxiosError', () => {
+      const config: GaxiosOptions = {};
+      const response: GaxiosResponse = {
+        status: 404,
+        statusText: 'Not Found',
+        data: {},
+        headers: {},
+        request: {} as any,
+        config,
+      };
+      const err = new GaxiosError('Some error', config, response);
+
+      const result = formatError(err);
+
+      expect(result).to.eql({
+        statusCode: 404,
+        message: 'Some error',
+        name: 'GaxiosError',
+        details: {
+          code: '404',
+          statusText: 'Not Found',
+        },
       });
     });
 

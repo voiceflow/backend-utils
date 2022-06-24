@@ -1,9 +1,11 @@
 import VError from '@voiceflow/verror';
 
+import * as Guards from '../../../guards';
 import type { ExceptionFormat } from '../types';
-import { formatHttpError, isHttpError } from './httpError';
-import { formatJavascriptError, isJavascriptError } from './jsError';
-import { formatVError, isVError } from './vError';
+import { formatGaxiosError } from './gaxiosError';
+import { formatHttpError } from './httpError';
+import { formatJavascriptError } from './jsError';
+import { formatVError } from './vError';
 
 export const formatError = (err: unknown): ExceptionFormat => {
   let exception: ExceptionFormat = {
@@ -12,9 +14,10 @@ export const formatError = (err: unknown): ExceptionFormat => {
     message: 'Unknown error',
   };
 
-  if (isVError(err)) exception = mergeExceptionResult(exception, formatVError(err));
-  else if (isHttpError(err)) exception = mergeExceptionResult(exception, formatHttpError(err));
-  else if (isJavascriptError(err)) exception = mergeExceptionResult(exception, formatJavascriptError(err));
+  if (Guards.isVError(err)) exception = mergeExceptionResult(exception, formatVError(err));
+  else if (Guards.isHttpError(err)) exception = mergeExceptionResult(exception, formatHttpError(err));
+  else if (Guards.isGaxiosError(err)) exception = mergeExceptionResult(exception, formatGaxiosError(err));
+  else if (Guards.isJavascriptError(err)) exception = mergeExceptionResult(exception, formatJavascriptError(err));
 
   return exception;
 };
