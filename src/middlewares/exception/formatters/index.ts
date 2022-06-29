@@ -1,4 +1,5 @@
 import VError from '@voiceflow/verror';
+import { merge } from 'lodash';
 
 import * as Guards from '../../../guards';
 import type { ExceptionFormat } from '../types';
@@ -24,7 +25,4 @@ export const formatError = (err: unknown): ExceptionFormat => {
   return exception;
 };
 
-export const mergeExceptionResult = (baseException: ExceptionFormat, exception: Partial<ExceptionFormat>) => ({
-  ...baseException,
-  ...exception,
-});
+export const mergeExceptionResult = (baseException: ExceptionFormat, exception: Partial<ExceptionFormat>) => merge(baseException, exception);
