@@ -44,7 +44,7 @@
     "@voiceflow/commitlint-config": "2.0.0",
     "@voiceflow/common": "7.27.3",
     "@voiceflow/eslint-config": "6.0.1",
-    "@voiceflow/git-branch-check": "1.2.5",
+    "@voiceflow/git-branch-check": "1.3.0",
     "@voiceflow/prettier-config": "1.2.1",
     "@voiceflow/tsconfig": "1.3.0",
     "chai-as-promised": "^7.1.1",
