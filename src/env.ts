@@ -46,8 +46,6 @@ export const setupEnv = (rootDir = process.cwd()): void => {
   } else if (fs.existsSync(path.join(rootDir, '.env'))) {
     console.log('No Environment Set/Not Found! Running default .env file');
     dotenv.config();
-  } else {
-    console.log('No Environment Set/Not Found! Hope you have your environment declared :O');
   }
 };
 /* eslint-enable no-console */
