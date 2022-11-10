@@ -20,7 +20,7 @@ class ResponseBuilder {
       return error.code;
     }
 
-    log.warn(`Unexpected error type: '${error.name}' from '${error.stack}'`);
+    log.warn(error, 'Unexpected error type');
 
     return VError.HTTP_STATUS.INTERNAL_SERVER_ERROR;
   }
@@ -89,14 +89,13 @@ class ResponseBuilder {
    * @param codeOverride optionally override the code specified in the error
    * @param req request object
    */
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   private static errorResponse<T>(
     error: (Error & { data?: T }) | string,
     codeOverride?: HttpStatus,
     req?: Request & { user?: { id: number } }
   ): ErrorResponse<T> {
     if (error && (error as any).isAxiosError) {
-      log.error(`@backend-utils:errorResponse - error:axios:${JSON.stringify(ResponseBuilder.getAxiosError(error as AxiosError))}`);
+      log.error(ResponseBuilder.getAxiosError(error as AxiosError), '@backend-utils:errorResponse - error:axios');
     }
 
     if (!(error instanceof Error)) {
@@ -127,10 +126,9 @@ class ResponseBuilder {
 
     if (response.code >= 500) {
       log.error(
+        error,
         // eslint-disable-next-line sonarjs/no-nested-template-literals
-        `500+ error: ${req?.originalUrl} ${req?.user ? ` User ID: ${req?.user.id}` : ''} ${error.stack} ${
-          error.data ? JSON.stringify(error.data) : ''
-        }`
+        `500+ error: ${req?.originalUrl} ${req?.user ? ` User ID: ${req?.user.id}` : ''}`
       );
     }
 

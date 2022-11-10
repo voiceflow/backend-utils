@@ -1,7 +1,15 @@
-import Logger from '@voiceflow/logger';
+import { createLogger, LogFormat, Logger, LoggerOptions, LogLevel } from '@voiceflow/logger';
 
-const options = ['local', 'test'].includes(process.env.NODE_ENV!) ? { level: 'info' as any, pretty: true } : {};
+const options: LoggerOptions = ['local', 'test'].includes(process.env.NODE_ENV!)
+  ? {
+      level: LogLevel.INFO,
+      format: LogFormat.INLINE,
+    }
+  : {
+      level: LogLevel.WARN,
+      format: LogFormat.JSON,
+    };
 
-const log = new Logger(options);
+const log: Logger = createLogger(options);
 
 export default log;
