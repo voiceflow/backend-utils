@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@types/http-errors": "^1.8.2",
-    "@voiceflow/logger": "1.6.1",
+    "@voiceflow/logger": "2.0.0",
     "@voiceflow/verror": "^1.1.0",
     "chai": "^4.3.4",
     "dotenv": "^10.0.0",
