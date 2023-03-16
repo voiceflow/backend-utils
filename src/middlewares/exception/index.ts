@@ -10,17 +10,23 @@ export class ExceptionMiddleware extends AbstractMiddleware<never, never> {
   }
 
   public handleError(err: unknown, req: Request, res: Response, _next: NextFunction): void {
-    log.error(`Exception formatter (pre) ${JSON.stringify(err)}`);
+    try {
+      log.error(`Exception formatter (pre) ${JSON.stringify(err)}`);
 
-    const { statusCode, ...body } = formatError(err);
+      const { statusCode, ...body } = formatError(err);
 
-    const error = {
-      ...body,
-      requestID: req.id.toString(),
-    };
+      const error = {
+        ...body,
+        requestID: req.id?.toString(),
+      };
 
-    log.error(`Exception formatter (post) ${JSON.stringify(error)}`);
+      log.error(`Exception formatter (post) ${JSON.stringify(error)}`);
 
-    res.status(statusCode).send(error);
+      res.status(statusCode).send(error);
+    } catch {
+      res.status(500).send({
+        error: err,
+      });
+    }
   }
 }
