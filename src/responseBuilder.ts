@@ -96,7 +96,11 @@ class ResponseBuilder {
     req?: Request & { user?: { id: number } }
   ): ErrorResponse<T> {
     if (error && (error as any).isAxiosError) {
-      log.error(`@backend-utils:errorResponse - error:axios:${JSON.stringify(ResponseBuilder.getAxiosError(error as AxiosError))}`);
+      log.error(
+        `@backend-utils:errorResponse - error:axios:${JSON.stringify(
+          ResponseBuilder.getAxiosError(error as AxiosError)
+        )}`
+      );
     }
 
     if (!(error instanceof Error)) {
@@ -198,7 +202,9 @@ class ResponseBuilder {
       let output: ErrorResponse<unknown> | ReturnType<typeof ResponseBuilder['okResponse']>;
 
       try {
-        const data = await (typeof dataPromise === 'function' ? (dataPromise as any)(req, res, nextCheck) : dataPromise);
+        const data = await (typeof dataPromise === 'function'
+          ? (dataPromise as any)(req, res, nextCheck)
+          : dataPromise);
 
         output =
           data instanceof Error

@@ -82,7 +82,9 @@ describe('rateLimit middleware unit tests', () => {
       const resource = 'version-id';
       const res = { setHeader: sinon.stub() };
 
-      await expect(service.consume(res as any, next, { isPublic: true, resource })).to.eventually.rejectedWith('Too Many Request');
+      await expect(service.consume(res as any, next, { isPublic: true, resource })).to.eventually.rejectedWith(
+        'Too Many Request'
+      );
 
       expect(services.rateLimitClient.public.consume.args).to.eql([[resource]]);
       expect(res.setHeader.args).to.eql([['Retry-After', Math.floor(rateLimiterRes.msBeforeNext / 1000)]]);

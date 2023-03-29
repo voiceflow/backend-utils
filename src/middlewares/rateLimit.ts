@@ -4,7 +4,10 @@ import { RateLimiterRes } from 'rate-limiter-flexible';
 
 import { AbstractMiddleware, RateLimitConfig } from '../types';
 
-export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLimitConfig> extends AbstractMiddleware<S, C> {
+export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLimitConfig> extends AbstractMiddleware<
+  S,
+  C
+> {
   static throwAuthError(): never {
     throw new VError('Auth Key Required', VError.HTTP_STATUS.UNAUTHORIZED);
   }
@@ -19,7 +22,11 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
     return !req.headers.authorization;
   }
 
-  async consume(res: Response, next: NextFunction, { resource, isPublic }: { resource: string; isPublic?: boolean }): Promise<void> {
+  async consume(
+    res: Response,
+    next: NextFunction,
+    { resource, isPublic }: { resource: string; isPublic?: boolean }
+  ): Promise<void> {
     const maxPoints = isPublic ? this.config.RATE_LIMITER_POINTS_PUBLIC : this.config.RATE_LIMITER_POINTS_PRIVATE;
     const rateLimiterClient = this.services.rateLimitClient[isPublic ? 'public' : 'private'];
 
