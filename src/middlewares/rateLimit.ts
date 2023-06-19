@@ -19,12 +19,12 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
     return !req.headers.authorization;
   }
 
-  async consume(res: Response, next: NextFunction, { resource, isPublic }: { resource: string; isPublic?: boolean }): Promise<void> {
-    const maxPoints = isPublic ? this.config.RATE_LIMITER_POINTS_PUBLIC : this.config.RATE_LIMITER_POINTS_PRIVATE;
-    const rateLimiterClient = this.services.rateLimitClient[isPublic ? 'public' : 'private'];
+  async consume(res: Response, next: NextFunction, options: { resource: string; isPublic?: boolean; maxPoints?: number }): Promise<void> {
+    const maxPoints = options.maxPoints ?? options.isPublic ? this.config.RATE_LIMITER_POINTS_PUBLIC : this.config.RATE_LIMITER_POINTS_PRIVATE;
+    const rateLimiterClient = this.services.rateLimitClient[options.isPublic ? 'public' : 'private'];
 
     try {
-      const rateLimiterRes = await rateLimiterClient.consume(resource!);
+      const rateLimiterRes = await rateLimiterClient.consume(options.resource!);
 
       RateLimitMiddleware.setHeaders(res, rateLimiterRes, maxPoints);
     } catch (rateLimiterRes) {
@@ -32,7 +32,7 @@ export class RateLimitMiddleware<S extends Record<string, any>, C extends RateLi
 
       RateLimitMiddleware.setHeaders(res, rateLimiterRes, maxPoints);
 
-      throw new VError('Too Many Request', VError.HTTP_STATUS.TOO_MANY_REQUESTS);
+      throw new VError('Too Many Requests', VError.HTTP_STATUS.TOO_MANY_REQUESTS);
     }
 
     return next();
