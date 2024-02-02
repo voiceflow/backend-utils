@@ -89,14 +89,13 @@ class ResponseBuilder {
    * @param codeOverride optionally override the code specified in the error
    * @param req request object
    */
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   private static errorResponse<T>(
     error: (Error & { data?: T }) | string,
     codeOverride?: HttpStatus,
     req?: Request & { user?: { id: number } }
   ): ErrorResponse<T> {
     if (error && (error as any).isAxiosError) {
-      log.error(`@backend-utils:errorResponse - error:axios:${JSON.stringify(ResponseBuilder.getAxiosError(error as AxiosError))}`);
+      log.error(`@backend-utils:errorResponse - error:axios %o`, ResponseBuilder.getAxiosError(error as AxiosError));
     }
 
     if (!(error instanceof Error)) {
@@ -128,9 +127,8 @@ class ResponseBuilder {
     if (response.code >= 500) {
       log.error(
         // eslint-disable-next-line sonarjs/no-nested-template-literals
-        `500+ error: ${req?.originalUrl} ${req?.user ? ` User ID: ${req?.user.id}` : ''} ${error.stack} ${
-          error.data ? JSON.stringify(error.data) : ''
-        }`
+        `500+ error: ${req?.originalUrl} ${req?.user ? ` User ID: ${req?.user.id}` : ''} ${error.stack} %o`,
+        error.data
       );
     }
 
