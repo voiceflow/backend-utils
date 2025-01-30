@@ -19,7 +19,7 @@
     "gaxios": "4.3.2",
     "http-errors": "^2.0.0",
     "http-status": "^1.4.2",
-    "jszip": "3.7.1",
+    "jszip": "3.8.0",
     "lodash": "^4.17.11",
     "luxon": "^1.21.3",
     "minimatch": "5.0.1",
